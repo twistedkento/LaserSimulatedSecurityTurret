@@ -4,9 +4,9 @@ import turret
 class IsOddTests(unittest.TestCase):
 
     def testOne(self):
-        angle = turret.getAngle()
-        turret.turnRight()
-        self.assertTrue(turret.getAngle() > angle)
+        angle = turret.get_angle()
+        turret.turn_right()
+        self.assertTrue(turret.get_angle() > angle)
 def main():
     unittest.main()
 

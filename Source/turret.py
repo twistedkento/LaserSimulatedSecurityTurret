@@ -1,13 +1,15 @@
-angle = 0
+import servo
 
-def turnLeft():
-    global angle
-    angle -= 1
+serv = servo.servo()
 
-def turnRight():
-    global angle
-    angle += 1
+def turn_left():
+	global serv
+	serv.turn_left()
+	
+def turn_right():
+	global serv
+	serv.turn_right()
 
-def getAngle():
-    global angle
-    return angle
+def get_angle():
+	global serv
+	return serv.get_angle()
