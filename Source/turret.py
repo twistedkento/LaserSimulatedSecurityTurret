@@ -1,4 +1,5 @@
 import servo
+import laser
 
 serv = servo.servo()
 
@@ -13,3 +14,6 @@ def turn_right():
 def get_angle():
 	global serv
 	return serv.get_angle()
+
+def fire_laser():
+    laser.fire()
