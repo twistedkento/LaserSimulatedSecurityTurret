@@ -7,3 +7,7 @@ def start_scanning():
 def stop_scanning():
     global scanning
     scanning = False
+
+def get_state():
+    global scanning
+    return scanning
