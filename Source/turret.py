@@ -6,7 +6,7 @@ def turnLeft():
 
 def turnRight():
     global angle
-    angle -= 1
+    angle += 1
 
 def getAngle():
     global angle
