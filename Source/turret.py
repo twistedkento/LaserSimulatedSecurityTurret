@@ -2,6 +2,7 @@ import servo
 import laser
 
 serv = servo.servo()
+manualmode = False
 
 def turn_left():
 	global serv
@@ -17,3 +18,13 @@ def get_angle():
 
 def fire_laser():
     laser.fire()
+
+def restart():
+    print("Restarting software...")
+
+def toggle_mode():
+    if manualmode:
+        manualmode = False
+    else:
+        manualmode = True
+    Print("Manualmode: " + str(manualmode))
