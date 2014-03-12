@@ -1,0 +1,57 @@
+imports
+	each import on separate lines
+	not indented
+	ex:
+import sys
+import os
+classes
+	Capitalized
+	strive for simplistic names describing the functionality of the class
+	ex:
+	Jensenligan
+functions
+	lowercase separated by underscores
+	simple and describing names
+	ex:
+	create_coding_standard()
+arguments
+	see variables
+
+variables
+	lowercase separated by underscores
+	simple and describing names
+	ex:
+	pi_id
+	server_addr
+
+comments
+	placed on the same indentation level as the appropriate content
+	start each comment with a space for readability
+	ex:
+	def comment_test():
+		# function to display comment placement
+		# this function is useless c:
+
+documentation-comments
+	use 3 single apostrophes and have them on separate lines
+	indent the comments
+	ex:
+	def comment_test():
+		'''
+			function to display comment placement
+			this function is useless c:
+		'''
+
+logic
+	always pad operators with 1 space, with exception for "!variable"
+	ex:
+	var = value
+	list = [
+		val1, val2, val3,
+		val4, val5
+	]
+	if var1 == var2
+
+
+whitespace
+	use 4 spaces for indentation
