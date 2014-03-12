@@ -1,5 +1,6 @@
 import servo
 import laser
+import camera
 
 serv = servo.servo()
 manualmode = False
@@ -28,3 +29,14 @@ def toggle_mode():
     else:
         manualmode = True
     Print("Manualmode: " + str(manualmode))
+	
+def run():
+	if camera.visible_target():
+		fire_laser()
+			
+def start(time):
+	time = time * 100
+	while(time > 0):
+		time-=1
+		run()
+		
