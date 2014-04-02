@@ -1,0 +1,10 @@
+[Unit]
+Description=Restore the date on bootup
+Before=network.target
+ 
+[Service]
+User=root
+ExecStart=/path/to/date_loader.py --load-date
+ 
+[Install]
+WantedBy=network.target
