@@ -1,6 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
 '''
-    DateFixer 9000 (Don't use it on E-harmony!)
+    File: date_loader.py
+    Author: Kenny Nilsson
+    Description: Saving and restoring the date on Arch Linux ARM
 '''
 
 import time
@@ -17,14 +20,14 @@ __static_date = '040210002014'
 def get_system_date():
     '''
         Gets the current date from the system or the predefined static date
-        if it is bigger.
+        if it is later.
     '''
     return max_date(time.strftime('%m%d%H%M%Y'), __static_date)
 
 def get_date_from_fs():
     '''
         Gets the current date from the filesystem or the predefined static date
-        if it is bigger.
+        if it is later.
     '''
     try:
         with open(__cache_file) as f:
@@ -34,10 +37,10 @@ def get_date_from_fs():
 
 def max_date(*indata):
     '''
-        Returns the biggest date given.
+        Returns the latest date given.
     '''
     try:
-        return sorted(indata, key=lambda x: time.strptime(x, '%m%d%H%M%Y'))[-1]
+        return sorted(indata, key=lambda x: time.strptime(x, '%m%d%H%M%Y'),reverse=True)[0]
     except ValueError:
         return __static_date
 
