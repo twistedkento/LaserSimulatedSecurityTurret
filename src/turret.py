@@ -1,42 +1,48 @@
-import servo
-import laser
-import camera
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-serv = servo.servo()
-manualmode = False
+from servo import ServoClass
+from laser import LaserClass
+from camera import CameraClass
 
-def turn_left():
-	global serv
-	serv.turn_left()
-	
-def turn_right():
-	global serv
-	serv.turn_right()
+class TurretClass(object):
+    '''
+        docstring for TurretClass
+    '''
+    def __init__(self):
+        super(TurretClass, self).__init__()
+        self.laser = LaserClass()
+        self.servo = ServoClass()
+        self.camera = CameraClass()
+        self.manualmode = False
 
-def get_angle():
-	global serv
-	return serv.get_angle()
+    def turn_left(self):
+        print(self.servo)
+        self.servo.turn_left()
 
-def fire_laser():
-    laser.fire()
+    def turn_right(self):
+        print(self.servo)
+        self.servo.turn_right()
 
-def restart():
-    print("Restarting software...")
+    def get_angle(self):
+        return self.servo.angle
 
-def toggle_mode():
-    if manualmode:
-        manualmode = False
-    else:
-        manualmode = True
-    Print("Manualmode: " + str(manualmode))
-	
-def run():
-	if camera.visible_target():
-		fire_laser()
-			
-def start(time):
-	time = time * 100
-	while(time > 0):
-		time-=1
-		run()
-		
+    def fire_laser(self):
+        self.laser.fire()
+
+    def restart(self):
+        print("Restarting software...")
+
+    def toggle_mode(self):
+        self.manualmode = not self.manualmode
+        Print("Manualmode: " + str(self.manualmode))
+
+    def run(self):
+        if self.camera.visible_target():
+            self.fire_laser()
+        self.turn_right()
+        self.turn_left()
+
+    def start(self, time):
+        for _ in range(time * 100, 0, -1):
+            self.run()

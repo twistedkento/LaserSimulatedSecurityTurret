@@ -1,0 +1,14 @@
+[Unit]
+Description=Try some ssh
+Before=network.target
+ 
+[Service]
+User=root
+ExecStart=-/bin/ssh 10.0.0.10 -N -o ConnectTimeout=1
+Restart=always
+RestartSec=15
+StartLimitInterval=15
+StartLimitBurst=5
+ 
+[Install]
+WantedBy=network.target
