@@ -43,7 +43,7 @@ def max_date(*indata):
         Returns the latest date given.
     '''
     try:
-        return sorted(indata, key=lambda x: time.strptime(x, '%m%d%H%M%Y'),reverse=True)[0]
+        return sorted(indata, key=lambda x: time.strptime(x, '%m%d%H%M%Y'), reverse=True)[0]
     except ValueError:
         return __static_date
 
@@ -95,13 +95,12 @@ def print_commands():
     '''
         Prints the command line arguments avaible for this script
     '''
-    print('\nUsage: ' + sys.argv[0] + ' [option]',end='\n\n')
+    print('\nUsage: ' + sys.argv[0] + ' [option]', end='\n\n')
     print('   --load-date'.ljust(40) + 'Loads the date stored in the filesystem and'    \
             + ' sets it as current date.')
     print('   --save-date'.ljust(40) + 'Saves the date used by the operatingsystem if it\'s' \
-            + ' a later date then the on in the savefile.',end='\n\n')
+            + ' a later date then the on in the savefile.', end='\n\n')
 
-    
 if __name__ == '__main__':
     check_fs()
     if '--load-date' in sys.argv:

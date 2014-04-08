@@ -9,4 +9,7 @@ class CameraClass(object):
         super(CameraClass, self).__init__()
         
     def visible_target(self):
+        '''
+            TODO: docstring
+        '''
         return True

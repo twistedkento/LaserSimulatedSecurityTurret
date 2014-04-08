@@ -18,9 +18,15 @@ class IsOddTests(unittest.TestCase):
         self.servo = ServoClass()
 
     def test_camera(self):
+        '''
+            TODO: docstring
+        '''
         self.assertTrue(self.camera.visible_target())
 
     def test_servo(self):
+        '''
+            TODO: docstring
+        '''
         angle = self.servo.angle
         for _ in range(1000):
             self.servo.turn_right()
@@ -29,15 +35,24 @@ class IsOddTests(unittest.TestCase):
         self.assertTrue(self.servo.angle >= 0)
 
     def test_laser(self):
+        '''
+            TODO: docstring
+        '''
         self.laser.turn_on()
         self.assertTrue(self.laser.get_powerstate())
         self.laser.turn_off()
         self.assertFalse(self.laser.get_powerstate())
 
     def test_fire_laser(self):
+        '''
+            TODO: docstring
+        '''
         self.turret.fire_laser()
 
     def test_automatic_firing(self):
+        '''
+            TODO: docstring
+        '''
         self.turret.start(50)
 
 if __name__ == '__main__':

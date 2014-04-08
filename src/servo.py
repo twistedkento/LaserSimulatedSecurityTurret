@@ -12,7 +12,13 @@ class ServoClass(object):
         return "Servo nr: {0}, Angle: {1}".format(None, self.angle)
 
     def turn_left(self):
+        '''
+            TODO: docstring
+        '''
         self.angle -= 1
 
     def turn_right(self):
+        '''
+            TODO: docstring
+        '''
         self.angle += 1
