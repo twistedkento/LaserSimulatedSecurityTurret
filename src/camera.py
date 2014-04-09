@@ -7,7 +7,7 @@ class CameraClass(object):
     '''
     def __init__(self):
         super(CameraClass, self).__init__()
-        
+
     def visible_target(self):
         '''
             TODO: docstring

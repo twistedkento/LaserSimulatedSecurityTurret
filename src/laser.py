@@ -9,7 +9,7 @@ class LaserClass(object):
     def __init__(self):
         super(LaserClass, self).__init__()
         self.__powerstate = False
-        
+
     def turn_on(self):
         '''
             TODO: docstring
@@ -29,7 +29,7 @@ class LaserClass(object):
             TODO: docstring
         '''
         return self.__powerstate
-        
+
     def fire(self):
         '''
             TODO: docstring
