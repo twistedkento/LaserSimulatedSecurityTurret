@@ -93,5 +93,5 @@ class TurretClass(object):
         '''
         self.manualmode = False
         start = time.process_time()
-        while (time.process_time() - start) < time_s :
+        while (time.process_time() - start) < time_s:
             self.run()

@@ -3,7 +3,7 @@
 
 class LaserClass(object):
     '''
-        docstring for LaserClass
+        Class that handles the hardware laser module
     '''
 
     def __init__(self):

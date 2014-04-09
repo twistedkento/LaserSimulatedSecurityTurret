@@ -28,8 +28,7 @@ class unit_tests(unittest.TestCase):
         '''
             Tries servo by rotating randomly
         '''
-        angle = self.servo.angle
-        for a in range(10):
+        for _ in range(10):
             self.servo.go_random()
             time.sleep(0.20)
         self.assertTrue(self.servo.angle <= self.servo._ServoClass__max_value)

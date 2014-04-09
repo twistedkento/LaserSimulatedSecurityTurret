@@ -8,7 +8,7 @@ class ServoClass(object):
         Representer of a servo connected at pin "pin"
     '''
     def save_decorator(f):
-        def inner_func(self,*args, **kw):
+        def inner_func(self, *args, **kw):
             try:
                 return f(self, *args, **kw)
             finally:
@@ -43,6 +43,10 @@ class ServoClass(object):
         self.angle = min(self.angle + 1, self.__max_value)
     @save_decorator
     def go_random(self):
+        '''
+            Positions the servo to a random position between the min and max values.
+            Mosly used for demoing purpose.
+        '''
         self.angle = random.randint(self.__min_value, self.__max_value)
 
     def do_save(self):
