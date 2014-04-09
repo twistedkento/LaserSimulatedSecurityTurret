@@ -19,14 +19,14 @@ class TurretClass(object):
 
     def turn_left(self):
         '''
-            TODO: docstring
+            Turns the turret left
         '''
         print(self.servo)
         self.servo.turn_left()
 
     def turn_right(self):
         '''
-            TODO: docstring
+            Turns the turret right
         '''
         print(self.servo)
         self.servo.turn_right()
@@ -58,10 +58,18 @@ class TurretClass(object):
 
     def run(self):
         '''
-            TODO: docstring
+            Continously updates the turret depending on mode
         '''
-        if self.camera.visible_target():
-            self.fire_laser()
+        if self.manualmode:
+            self.manual()
+        else:
+            self.auto_aim()
+    
+    def manual():
+        '''
+            Takes input for steering and firing
+        '''
+        #   TODO: REPLACE, currently just exampe movement
         for i in range(150):
             self.turn_right()
             if i % 5 == 0:
@@ -70,10 +78,20 @@ class TurretClass(object):
             self.turn_left()
             if i % 5 == 0:
                 time.sleep(0.02)
+    
+    def auto_aim(self):
+        '''
+            Automaticly aims at target and shoots
+        '''
+        if self.camera.visible_target():
+            self.fire_laser()
+        
 
-    def start(self, time):
+    def start_autoaim(self, time_s):
         '''
-            TODO: docstring
+            Runs the autoaim mode in "time_s" seconds
         '''
-        for _ in range(time * 1, 0, -1):
+        self.manualmode = False
+        start = time.process_time()
+        while (time.process_time() - start) < time_s :
             self.run()

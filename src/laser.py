@@ -12,28 +12,29 @@ class LaserClass(object):
 
     def turn_on(self):
         '''
-            TODO: docstring
+            Turns laser on
         '''
         self.__powerstate = True
-        #print("Powerstate: " + str(self.__powerstate))
+        #   TODO : Turn on laser 
 
     def turn_off(self):
         '''
-            TODO: docstring
+            Turns laser off
         '''
         self.__powerstate = False
-        #print("Powerstate: " + str(self.__powerstate))
+        #   TODO : Turn off laser
 
     def get_powerstate(self):
         '''
-            TODO: docstring
+            returns on/off state of laser
         '''
         return self.__powerstate
 
     def fire(self):
         '''
-            TODO: docstring
+            Turns on and off laser + beeps
         '''
         self.turn_on()
+        #   TODO: Play speaker sound
         #print("IMMA FIRIN' MA LAZOR!!!")
         self.turn_off()

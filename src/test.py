@@ -9,10 +9,10 @@ from laser import LaserClass
 from camera import CameraClass
 
 
-class IsOddTests(unittest.TestCase):
+class unit_tests(unittest.TestCase):
 
     def __init__(self, *args):
-        super(IsOddTests, self).__init__(*args)
+        super(unit_tests, self).__init__(*args)
         self.camera = CameraClass()
         self.laser = LaserClass()
         self.turret = TurretClass()
@@ -20,25 +20,24 @@ class IsOddTests(unittest.TestCase):
 
     def test_camera(self):
         '''
-            TODO: docstring
+            Test if camera can see a target
         '''
         self.assertTrue(self.camera.visible_target())
 
     def test_servo(self):
         '''
-            TODO: docstring
+            Tries servo by rotating randomly
         '''
         angle = self.servo.angle
-        for a in range(100):
+        for a in range(10):
             self.servo.go_random()
             time.sleep(0.20)
-        #self.assertTrue(self.servo.angle > angle)
         self.assertTrue(self.servo.angle <= self.servo._ServoClass__max_value)
         self.assertTrue(self.servo.angle >= self.servo._ServoClass__min_value)
 
     def test_laser(self):
         '''
-            TODO: docstring
+            Tests the laser by turning it on and off
         '''
         self.laser.turn_on()
         self.assertTrue(self.laser.get_powerstate())
@@ -47,15 +46,15 @@ class IsOddTests(unittest.TestCase):
 
     def test_fire_laser(self):
         '''
-            TODO: docstring
+            Tests the laser by firing it once
         '''
         self.turret.fire_laser()
 
     def test_automatic_firing(self):
         '''
-            TODO: docstring
+            Runs automatic firing in 
         '''
-        self.turret.start(1)
+        self.turret.start_autoaim(1)
 
 if __name__ == '__main__':
     unittest.main(buffer=True, verbosity=2)

@@ -5,7 +5,7 @@ import random
 
 class ServoClass(object):
     '''
-        docstring for ServoClass
+        Representer of a servo connected at pin "pin"
     '''
     def save_decorator(f):
         def inner_func(self,*args, **kw):
@@ -31,14 +31,14 @@ class ServoClass(object):
     @save_decorator
     def turn_left(self):
         '''
-            TODO: docstring
+            Reduces the angle of the servo by 1
         '''
         self.angle = max(self.angle - 1, self.__min_value)
 
     @save_decorator
     def turn_right(self):
         '''
-            TODO: docstring
+            Increases the angle of servo by 1
         '''
         self.angle = min(self.angle + 1, self.__max_value)
     @save_decorator
@@ -47,7 +47,7 @@ class ServoClass(object):
 
     def do_save(self):
         '''
-            TODO:docstring
+            Writes the angle to the file used by servoblaster kernel module
         '''
         with open('/dev/servoblaster', 'w') as sblaster:
             sblaster.write('{0}={1}\n'.format(self.pin, self.angle))
