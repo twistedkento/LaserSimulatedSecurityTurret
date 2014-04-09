@@ -12,7 +12,7 @@ class TurretClass(object):
     def __init__(self):
         super(TurretClass, self).__init__()
         self.laser = LaserClass()
-        self.servo = ServoClass(7)
+        self.servo = ServoClass(0)
         self.camera = CameraClass()
         self.manualmode = False
 

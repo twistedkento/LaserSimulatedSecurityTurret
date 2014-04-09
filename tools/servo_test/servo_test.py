@@ -1,4 +1,4 @@
-#import rpi.GPIO as GPIO
+import rpi.GPIO as GPIO
 import time
 import curses
 
@@ -11,33 +11,39 @@ if __name__ == '__main__':
     curses.cbreak()
     stdscr.keypad(1)
 
-    #GPIO.setmode(GPIO.BOARD)
-    #GPIO.cleanup()
+    try:
+        GPIO.setmode(GPIO.BOARD)
 
-    stdscr.nodelay(1)
-    while True:
-        c = stdscr.getch()
-        if c == 27:
-            break
-        elif c == curses.KEY_LEFT:
-            curses.flushinp()
-            print(c)
-        elif c == curses.KEY_RIGHT:
-            curses.flushinp()
-            print(c)
-        elif not c == -1:
-            curses.flushinp()
-            print(c)
-        else:
-            curses.flushinp()
-        time.sleep(0.1)
+        stdscr.nodelay(1)
+        while True:
+            c = stdscr.getch()
+            if c == 27:
+                break
+            elif c == curses.KEY_LEFT:
+                curses.flushinp()
+                print(c)
+            elif c == curses.KEY_RIGHT:
+                curses.flushinp()
+                print(c)
+            elif not c == -1:
+                curses.flushinp()
+                print(c)
+            else:
+                curses.flushinp()
+            time.sleep(0.1)
 
-     #   GPIO.output(7, True)
-     #   time.sleep(__sleep_time/10000)
-     #   GPIO.output(7, False)
-     #   time.sleep((20 - __sleep_time)/10000)
+            GPIO.output(7, True)
+            time.sleep(__sleep_time/10000)
+            GPIO.output(7, False)
+            time.sleep((20 - __sleep_time)/10000)
+            time.sleep((200)/10000)
+    except
 
-    curses.nocbreak()
-    stdscr.keypad(0)
-    curses.echo()
-    curses.endwin()
+    except:
+        pass
+    finally:
+        GPIO.cleanup()
+        curses.nocbreak()
+        stdscr.keypad(0)
+        curses.echo()
+        curses.endwin()
