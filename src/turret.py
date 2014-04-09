@@ -15,7 +15,7 @@ class TurretClass(object):
         self.laser = LaserClass()
         self.servo = ServoClass(0)
         self.camera = CameraClass()
-        self.manualmode = False
+        self.manualmodeGet re = False
 
     def turn_left(self):
         '''
@@ -65,7 +65,7 @@ class TurretClass(object):
         else:
             self.auto_aim()
     
-    def manual():
+    def manual(self):
         '''
             Takes input for steering and firing
         '''
