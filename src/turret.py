@@ -15,7 +15,7 @@ class TurretClass(object):
         self.laser = LaserClass()
         self.servo = ServoClass(0)
         self.camera = CameraClass()
-        self.manualmodeGet re = False
+        self.manualmode = False
 
     def turn_left(self):
         '''
