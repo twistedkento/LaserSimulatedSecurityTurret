@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+import time
 from turret import TurretClass
 from servo import ServoClass
 from laser import LaserClass
@@ -15,7 +16,7 @@ class IsOddTests(unittest.TestCase):
         self.camera = CameraClass()
         self.laser = LaserClass()
         self.turret = TurretClass()
-        self.servo = ServoClass()
+        self.servo = ServoClass(0)
 
     def test_camera(self):
         '''
@@ -28,11 +29,12 @@ class IsOddTests(unittest.TestCase):
             TODO: docstring
         '''
         angle = self.servo.angle
-        for _ in range(1000):
-            self.servo.turn_right()
-        self.assertTrue(self.servo.angle > angle)
-        self.assertTrue(self.servo.angle <= 180)
-        self.assertTrue(self.servo.angle >= 0)
+        for a in range(100):
+            self.servo.go_random()
+            time.sleep(0.20)
+        #self.assertTrue(self.servo.angle > angle)
+        self.assertTrue(self.servo.angle <= self.servo._ServoClass__max_value)
+        self.assertTrue(self.servo.angle >= self.servo._ServoClass__min_value)
 
     def test_laser(self):
         '''
@@ -53,7 +55,7 @@ class IsOddTests(unittest.TestCase):
         '''
             TODO: docstring
         '''
-        self.turret.start(50)
+        self.turret.start(1)
 
 if __name__ == '__main__':
     unittest.main(buffer=True, verbosity=2)

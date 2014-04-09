@@ -15,14 +15,14 @@ class LaserClass(object):
             TODO: docstring
         '''
         self.__powerstate = True
-        print("Powerstate: " + str(self.__powerstate))
+        #print("Powerstate: " + str(self.__powerstate))
 
     def turn_off(self):
         '''
             TODO: docstring
         '''
         self.__powerstate = False
-        print("Powerstate: " + str(self.__powerstate))
+        #print("Powerstate: " + str(self.__powerstate))
 
     def get_powerstate(self):
         '''
@@ -35,5 +35,5 @@ class LaserClass(object):
             TODO: docstring
         '''
         self.turn_on()
-        print("IMMA FIRIN' MA LAZOR!!!")
+        #print("IMMA FIRIN' MA LAZOR!!!")
         self.turn_off()

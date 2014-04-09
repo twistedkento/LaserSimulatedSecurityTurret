@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import time
 from servo import ServoClass
 from laser import LaserClass
 from camera import CameraClass
@@ -61,12 +62,18 @@ class TurretClass(object):
         '''
         if self.camera.visible_target():
             self.fire_laser()
-        self.turn_right()
-        self.turn_left()
+        for i in range(150):
+            self.turn_right()
+            if i % 5 == 0:
+                time.sleep(0.02)
+        for i in range(150):
+            self.turn_left()
+            if i % 5 == 0:
+                time.sleep(0.02)
 
     def start(self, time):
         '''
             TODO: docstring
         '''
-        for _ in range(time * 100, 0, -1):
+        for _ in range(time * 1, 0, -1):
             self.run()
