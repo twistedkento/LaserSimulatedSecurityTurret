@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+import sys
 
 class ServoClass(object):
     '''
@@ -19,6 +20,7 @@ class ServoClass(object):
         self.__max_value = 230
         self.__min_value = 60
         self.__start_value = 140
+        self.__servo_file = '/dev/servoblaster'
         self.angle = self.__start_value
         if pin < 0 and pin > 7:
             raise
@@ -53,5 +55,8 @@ class ServoClass(object):
         '''
             Writes the angle to the file used by servoblaster kernel module
         '''
-        with open('/dev/servoblaster', 'w') as sblaster:
-            sblaster.write('{0}={1}\n'.format(self.pin, self.angle))
+        if sys.flags.debug:
+            sys.stderr.write('{0}={1}\n'.format(self.pin, self.angle))
+        else:
+            with open(self.__servo_file, 'w') as sblaster:
+                sblaster.write('{0}={1}\n'.format(self.pin, self.angle))
