@@ -10,6 +10,6 @@ class CameraClass(object):
 
     def visible_target(self):
         '''
-            TODO: docstring
+            Returns true if target is visible
         '''
         return True
