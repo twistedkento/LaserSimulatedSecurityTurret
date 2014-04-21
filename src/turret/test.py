@@ -17,6 +17,7 @@ class unit_tests(unittest.TestCase):
         self.laser = LaserClass()
         self.turret = TurretClass()
         self.servo = ServoClass(0)
+        self.servob = ServoClass(1)
 
     def test_camera(self):
         '''
@@ -30,6 +31,7 @@ class unit_tests(unittest.TestCase):
         '''
         for _ in range(10):
             self.servo.go_random()
+            self.servob.go_random()
             time.sleep(0.20)
         self.assertTrue(self.servo.angle <= self.servo._ServoClass__max_value)
         self.assertTrue(self.servo.angle >= self.servo._ServoClass__min_value)

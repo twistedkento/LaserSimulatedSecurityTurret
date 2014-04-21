@@ -22,7 +22,7 @@ class ServoClass(object):
         self.__start_value = 140
         self.__servo_file = '/dev/servoblaster'
         self.angle = self.__start_value
-        if pin < 0 and pin > 7:
+        if pin < 0 or pin > 7:
             raise
         self.pin = pin
         self.do_save()
