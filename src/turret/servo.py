@@ -17,7 +17,7 @@ class ServoClass(object):
         return inner_func
 
     def __init__(self, pin=None):
-        self.__max_value = 230
+        self.__max_value = 200
         self.__min_value = 60
         self.__start_value = 140
         self.__servo_file = '/dev/servoblaster'
