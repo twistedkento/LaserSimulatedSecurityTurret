@@ -30,6 +30,10 @@ class ServoClass(object):
     def __str__(self):
         return "Servo nr: {0}, Angle: {1}".format(self.pin, self.angle)
 
+    def reset(self):
+        self.angle = self.__start_value
+        self.do_save()
+
     @save_decorator
     def turn_left(self):
         '''
@@ -50,6 +54,7 @@ class ServoClass(object):
             Mosly used for demoing purpose.
         '''
         self.angle = random.randint(self.__min_value, self.__max_value)
+        #self.angle = random.randint(self.angle-40 if self.angle-40 >= self.__min_value, self.angle+40 if self.angle+40 <= self.__max_value)
 
     def do_save(self):
         '''

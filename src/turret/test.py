@@ -29,12 +29,14 @@ class unit_tests(unittest.TestCase):
         '''
             Tries servo by rotating randomly
         '''
-        for _ in range(10):
+        for _ in range(20):
             self.servo.go_random()
             self.servob.go_random()
-            time.sleep(0.20)
+            time.sleep(0.5)
         self.assertTrue(self.servo.angle <= self.servo._ServoClass__max_value)
         self.assertTrue(self.servo.angle >= self.servo._ServoClass__min_value)
+        self.servo.reset()
+        self.servob.reset()
 
     def test_laser(self):
         '''
