@@ -3,6 +3,7 @@
 
 import random
 import sys
+import math
 
 class ServoClass(object):
     '''
@@ -65,6 +66,16 @@ class ServoClass(object):
             
         self.angle = random.randint(minrandom, maxrandom)
         #self.angle = random.randint(self.angle-40 if self.angle-40 >= self.__min_value, self.angle+40 if self.angle+40 <= self.__max_value)
+    
+    @save_decorator
+    def go_circle(self, angle, servo):
+        '''
+            Positions the servo to the specified angle.
+        '''
+        if servo == 0:
+            self.angle = 70*sin(radian(angle)) + self.__min_value + (self.__max_value / 2)
+        else:
+            self.angle = 70*cos(radian(angle)) + self.__min_value + (self.__max_value / 2)
 
     def do_save(self):
         '''
