@@ -30,6 +30,8 @@ class unit_tests(unittest.TestCase):
             Tries servo by rotating randomly
         '''
         for i in range(60):
+            #self.servo.go_random()
+            #self.servob.go_random()
             self.servo.go_circle(i*6, 0)
             self.servob.go_circle(i*6, 1)
             time.sleep(0.2)
