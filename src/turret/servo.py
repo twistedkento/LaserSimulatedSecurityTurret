@@ -54,7 +54,16 @@ class ServoClass(object):
             Positions the servo to a random position between the min and max values.
             Mosly used for demoing purpose.
         '''
-        self.angle = random.randint(self.__min_value, self.__max_value)
+        minrandom = self.angle-30
+        maxrandom = self.angle+30
+        if minrandom < self.__min_value:
+            maxrandom += self.__min_value - minrandom
+            minrandom = self.__min_value
+        if maxrandom > self.__max_value:
+            minrandom += self.__max_value - maxrandom
+            maxrandom = self.__max_value
+            
+        self.angle = random.randint(minrandom, maxrandom)
         #self.angle = random.randint(self.angle-40 if self.angle-40 >= self.__min_value, self.angle+40 if self.angle+40 <= self.__max_value)
 
     def do_save(self):
