@@ -47,6 +47,7 @@ class ServoClass(object):
             Increases the angle of servo by 1
         '''
         self.angle = min(self.angle + 1, self.__max_value)
+
     @save_decorator
     def go_random(self):
         '''
