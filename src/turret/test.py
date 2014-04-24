@@ -3,10 +3,10 @@
 
 import unittest
 import time
+from camera import CameraClass
 from turret import TurretClass
 from servo import ServoClass
 from laser import LaserClass
-from camera import CameraClass
 
 
 class unit_tests(unittest.TestCase):
@@ -18,13 +18,13 @@ class unit_tests(unittest.TestCase):
         self.turret = TurretClass()
         self.servo = ServoClass(0)
         self.servob = ServoClass(1)
-
+    
     def test_camera(self):
         '''
             Test if camera can see a target
         '''
         self.assertTrue(self.camera.visible_target())
-
+    
     def test_servo(self):
         '''
             Tries servo by rotating randomly
