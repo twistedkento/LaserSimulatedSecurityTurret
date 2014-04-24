@@ -73,9 +73,9 @@ class ServoClass(object):
             Positions the servo to the specified angle.
         '''
         if servo == 0:
-            self.angle = 70*math.sin(math.radians(angle)) + self.__min_value + (self.__max_value / 2)
+            self.angle = int(30*math.sin(math.radians(angle)) + self.__min_value + (self.__max_value / 2))
         else:
-            self.angle = 70*math.cos(math.radians(angle)) + self.__min_value + (self.__max_value / 2)
+            self.angle = int(50*math.cos(math.radians(angle)) + self.__min_value + (self.__max_value / 2) - 15)
 
     def do_save(self):
         '''
