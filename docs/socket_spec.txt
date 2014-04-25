@@ -1,0 +1,37 @@
+################################################################################
+#                                                                              #
+#       Proposal for TCP communication between input-devices and turret        #
+#                                                                              #
+#                             Not finalized                                    #
+#                                                                              #
+################################################################################
+
+
+TCP proposal for communication from the input/control -unit -> R.PI board:
+
+* Servo needs three states Off, Decrease, Increase [2 bits] * 2
+[00 OFF] [01 INC] [10 DEC]
+
+* Laser needs two states Off, On [1 bit]
+[0 OFF] [1 ON]
+
+* Reserved for future uses. (Camera activation for example) [3 bits]
+
+Data layout:
+[ Servo1 | Servo2 | Laser | Reserved ]
+
+-------------------------------------------------------------------------------
+
+TCP proposal for communication from the R.PI board -> input/control -unit:
+
+When the inputdevice is connected the turret sends the current values.
+
+* Servo sends char with the current angle [8 bits] * 2
+[0 - 256]
+
+* Laser sends a boolean describing the current state [1 bit]
+[0 OFF] [1 ON]
+
+Data layout:
+[Servo1] [Servo2] [Laser]
+
