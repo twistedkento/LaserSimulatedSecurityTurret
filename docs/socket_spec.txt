@@ -18,7 +18,7 @@ TCP proposal for communication from the input/control -unit -> R.PI board:
 * Reserved for future uses. (Camera activation for example) [3 bits]
 
 Data layout:
-[ Servo1 | Servo2 | Laser | Reserved ]
+[ Servo1 | Servo2 | Laser | Reserved ] = Total 8 bits (1 char)
 
 -------------------------------------------------------------------------------
 
@@ -33,5 +33,5 @@ When the inputdevice is connected the turret sends the current values.
 [0 OFF] [1 ON]
 
 Data layout:
-[Servo1] [Servo2] [Laser]
+[Servo1] [Servo2] [Laser] = Total 17 bits (2 chars and 1 boolean)
 
