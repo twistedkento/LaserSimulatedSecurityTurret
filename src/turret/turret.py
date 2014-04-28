@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import time
 import socketserver
 from multiprocessing import Process, Queue
 from turret_tcphandler import TurretTCPHandler
