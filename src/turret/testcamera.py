@@ -18,7 +18,5 @@ class unit_tests_camera(unittest.TestCase):
         '''
         self.assertTrue(self.camera.visible_target())
 
-    
-
 if __name__ == '__main__':
     unittest.main(buffer=True, verbosity=2)

@@ -32,18 +32,21 @@ class ServoClass(object):
         return "Servo nr: {0}, Angle: {1}".format(self.pin, self.angle)
 
     def reset(self):
+        '''
+            Return to start value
+        '''
         self.angle = self.__start_value
         self.do_save()
 
     @save_decorator
-    def turn_left(self):
+    def increase(self):
         '''
             Reduces the angle of the servo by 1
         '''
         self.angle = max(self.angle - 1, self.__min_value)
 
     @save_decorator
-    def turn_right(self):
+    def decrease(self):
         '''
             Increases the angle of servo by 1
         '''

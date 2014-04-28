@@ -9,8 +9,8 @@
 
 TCP proposal for communication from the input/control -unit -> R.PI board:
 
-* Servo needs three states Off, Decrease, Increase [2 bits] * 2
-[00 OFF] [01 INC] [10 DEC]
+* Servo will have four states Off, Decrease, Increase, Reset [2 bits] * 2
+[00 OFF] [01 INC] [10 DEC] [11 RESET]
 
 * Laser needs two states Off, On [1 bit]
 [0 OFF] [1 ON]

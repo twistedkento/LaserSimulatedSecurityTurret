@@ -11,11 +11,11 @@ class TurretCommand(object):
         off = 0
         on = 1
 
-    def __init__(self, value=None):
+    def __init__(self, value=0):
         if isinstance(value, bytes):
             self.__value = int.from_bytes(value, byteorder='little')
         else:
-            self.__value = 0 if not value else value
+            self.__value = value
 
     def __int__(self):
         return self.__value

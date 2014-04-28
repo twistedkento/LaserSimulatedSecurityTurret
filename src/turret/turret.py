@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import time
+import socketserver
+from multiprocessing import Process, Queue
+from turret_tcphandler import TurretTCPHandler
+from turret_command import TurretCommand as command
 from servo import ServoClass
 from laser import LaserClass
 from camera import CameraClass
@@ -13,7 +18,8 @@ class TurretClass(object):
     def __init__(self):
         super(TurretClass, self).__init__()
         self.laser = LaserClass()
-        self.servo = ServoClass(0)
+        self.servo_x = ServoClass(0)
+        self.servo_y = ServoClass(1)
         self.camera = CameraClass()
         self.manualmode = False
 
@@ -21,77 +27,109 @@ class TurretClass(object):
         '''
             Turns the turret left
         '''
-        print(self.servo)
-        self.servo.turn_left()
+        self.servo_x.decrease()
 
     def turn_right(self):
         '''
             Turns the turret right
         '''
-        print(self.servo)
-        self.servo.turn_right()
+        self.servo_x.increase()
+
+    def vertical_reset(self):
+        '''
+            Returns turret to initial vertical state
+        '''
+        self.servo_x.reset()
+
+    def turn_up(self):
+        '''
+            Turns the turret up
+        '''
+        self.servo_y.increase()
+
+    def turn_down(self):
+        '''
+            Turns the turret down
+        '''
+        self.servo_y.decrease()
+
+    def horizontal_reset(self):
+        '''
+            Returns turret to initial horizontal state
+        '''
+        self.servo_y.reset()
 
     def get_angle(self):
         '''
-            TODO: docstring
+            TODO: Is this function needed?
         '''
-        return self.servo.angle
+        return {'x': self.servo_x.angle, 'y': self.servo_y.angle}
 
     def fire_laser(self):
         '''
-            TODO: docstring
+            Fire the laser
         '''
         self.laser.fire()
 
     def restart(self):
         '''
-            TODO: docstring
+            Resets the turret
         '''
         print("Restarting software...")
+        self.vertical_reset()
+        self.horizontal_reset()
+        self.laser.turn_off()
 
     def toggle_mode(self):
         '''
-            TODO: docstring
+            TODO: Decide if this is needed?
         '''
         self.manualmode = not self.manualmode
         print("Manualmode: " + str(self.manualmode))
 
     def run(self):
         '''
-            Continously updates the turret depending on mode
+            Main loop that handles the turret.
         '''
-        if self.manualmode:
-            self.manual()
-        else:
-            self.auto_aim()
-    
-    def manual(self):
-        '''
-            Takes input for steering and firing
-        '''
-        #   TODO: REPLACE, currently just exampe movement
-        for i in range(150):
-            self.turn_right()
-            if i % 5 == 0:
-                time.sleep(0.02)
-        for i in range(150):
-            self.turn_left()
-            if i % 5 == 0:
-                time.sleep(0.02)
-    
-    def auto_aim(self):
-        '''
-            Automaticly aims at target and shoots
-        '''
-        if self.camera.visible_target():
-            self.fire_laser()
-        
+        HOST, PORT = "0.0.0.0", 9999
+        server = socketserver.TCPServer((HOST, PORT), TurretTCPHandler)
+        try:
+            servostate = command.ServoState
+            laserstate = command.LaserState
+            server.command_queue = Queue()
+            server.connected_clients = 0
+            p = Process(target=server.serve_forever)
+            p.start()
+            while True:
+                #TODO: This code is fugly.
+                #will fix after some refactoring
+                msg = server.command_queue.get()
+                if servostate(msg.servo_x) == servostate.inc:
+                    self.turn_right()
+                elif servostate(msg.servo_x) == servostate.dec:
+                    self.turn_left()
+                elif servostate(msg.servo_x) == servostate.off:
+                    pass
+                elif servostate(msg.servo_x) == servostate.reset:
+                    self.horizontal_reset()
+                if servostate(msg.servo_y) == servostate.inc:
+                    self.turn_up()
+                elif servostate(msg.servo_y) == servostate.dec:
+                    self.turn_down()
+                elif servostate(msg.servo_y) == servostate.off:
+                    pass
+                elif servostate(msg.servo_y) == servostate.reset:
+                    self.vertical_reset()
+                if laserstate(msg.laser) == laserstate.on:
+                    self.laser.turn_on()
+                elif laserstate(msg.laser) == laserstate.off:
+                    self.laser.turn_off()
+        except KeyboardInterrupt:
+            print("Exiting server loop")
+        finally:
+            server.server_close()
 
-    def start_autoaim(self, time_s):
-        '''
-            Runs the autoaim mode in "time_s" seconds
-        '''
-        self.manualmode = False
-        start = time.process_time()
-        while (time.process_time() - start) < time_s:
-            self.run()
+
+if __name__ == '__main__':
+    turret = TurretClass()
+    turret.run()
