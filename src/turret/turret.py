@@ -26,13 +26,13 @@ class TurretClass(object):
         '''
             Turns the turret left
         '''
-        self.servo_x.decrease()
+        self.servo_x.increase()
 
     def turn_right(self):
         '''
             Turns the turret right
         '''
-        self.servo_x.increase()
+        self.servo_x.decrease()
 
     def vertical_reset(self):
         '''
