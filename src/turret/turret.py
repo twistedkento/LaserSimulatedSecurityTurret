@@ -22,6 +22,23 @@ class TurretClass(object):
         self.camera = CameraClass()
         self.manualmode = False
 
+        servostate = command.ServoState
+        laserstate = command.LaserState
+        self.command_calls = dict()
+        self.command_calls['servo_x'] = {
+                servostate.inc : self.turn_right,
+                servostate.dec: self.turn_left,
+                servostate.off: lambda: None,
+                servostate.reset: self.horizontal_reset}
+        self.command_calls['servo_y'] = {
+                servostate.inc : self.turn_up,
+                servostate.dec: self.turn_down,
+                servostate.off: lambda: None,
+                servostate.reset: self.vertical_reset}
+        self.command_calls['laser'] = {
+                laserstate.on: self.laser.turn_on,
+                laserstate.off : self.laser.turn_off}
+
     def turn_left(self):
         '''
             Turns the turret left
@@ -85,6 +102,17 @@ class TurretClass(object):
         '''
         self.manualmode = not self.manualmode
         print("Manualmode: " + str(self.manualmode))
+    
+    def handle_command(self, in_command):
+        '''
+            Handles the command input sent from the client
+        '''
+        servostate = command.ServoState
+        laserstate = command.LaserState
+
+        self.command_calls['servo_x'][servostate(in_command.servo_x)]()
+        self.command_calls['servo_y'][servostate(in_command.servo_y)]()
+        self.command_calls['laser'][laserstate(in_command.laser)]()
 
     def run(self):
         '''
@@ -93,36 +121,13 @@ class TurretClass(object):
         HOST, PORT = "0.0.0.0", 9999
         server = socketserver.TCPServer((HOST, PORT), TurretTCPHandler)
         try:
-            servostate = command.ServoState
-            laserstate = command.LaserState
             server.command_queue = Queue()
             server.connected_clients = 0
             p = Process(target=server.serve_forever)
             p.start()
             while True:
-                #TODO: This code is fugly.
-                #will fix after some refactoring
                 msg = server.command_queue.get()
-                if servostate(msg.servo_x) == servostate.inc:
-                    self.turn_right()
-                elif servostate(msg.servo_x) == servostate.dec:
-                    self.turn_left()
-                elif servostate(msg.servo_x) == servostate.off:
-                    pass
-                elif servostate(msg.servo_x) == servostate.reset:
-                    self.horizontal_reset()
-                if servostate(msg.servo_y) == servostate.inc:
-                    self.turn_up()
-                elif servostate(msg.servo_y) == servostate.dec:
-                    self.turn_down()
-                elif servostate(msg.servo_y) == servostate.off:
-                    pass
-                elif servostate(msg.servo_y) == servostate.reset:
-                    self.vertical_reset()
-                if laserstate(msg.laser) == laserstate.on:
-                    self.laser.turn_on()
-                elif laserstate(msg.laser) == laserstate.off:
-                    self.laser.turn_off()
+                self.handle_command(msg)
         except KeyboardInterrupt:
             print("Exiting server loop")
         finally:
