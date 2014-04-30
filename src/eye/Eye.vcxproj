@@ -66,16 +66,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\David\Downloads\opencv\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\David\Downloads\opencv\build\include;C:\Python34\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\David\Downloads\opencv\build\x64\vc12\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\David\Downloads\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\David\Downloads\opencv\build\x64\vc12\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\David\Downloads\opencv\build\include;C:\Python34\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\David\Downloads\opencv\build\x64\vc12\lib;C:\Python34\libs;C:\Python-3.4.0\PCbuild\amd64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\David\Downloads\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\David\Downloads\opencv\build\x64\vc12\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\David\Downloads\opencv\build\include;C:\Python33\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\David\Downloads\opencv\build\x64\vc12\lib;C:\Python33\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,12 +129,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="opticalFlow.cpp" />
     <ClCompile Include="motion.cpp" />
+    <ClCompile Include="python.cpp" />
+    <ClCompile Include="turret.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="filesystem.h" />
     <ClInclude Include="opticalFlow.h" />
+    <ClInclude Include="python.h" />
+    <ClInclude Include="turret.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

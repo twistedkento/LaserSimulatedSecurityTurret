@@ -1,5 +1,6 @@
 extern void DetectMotion();
 
-int main(){
+#include <iostream>
+void main(){
 	DetectMotion();
 }

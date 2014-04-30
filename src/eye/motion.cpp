@@ -11,38 +11,14 @@ typedef std::vector<cv::Vec4i> Hierarchy;
 Mat Delta(Mat back,Mat frame){
 	Mat diff;
 	absdiff(back, frame, diff);
-	//imshow("diff", diff);
-	//moveWindow("diff", 640, 0);
 	cv::inRange(diff, cv::Scalar(0, 0, 0), cv::Scalar(50, 50, 50), diff);
 	return diff < 253;
 }
 
-float dist(Rect a, Rect b){
-	int x1 = a.x + a.width / 2;
-	int y1 = a.y + a.height / 2;
-	int x2 = b.x + b.width / 2;
-	int y2 = b.y + b.height / 2;
-
-	return (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2);
-}
-
 cv::Rect getVIP(vector<Rect> rects){
-	//vector<int> weights(rects.size());
 	return *std::max_element(rects.begin(), rects.end(), [](Rect a,Rect b){
 		return a.area() < b.area();
 	});
-
-	/*for (int i = 0; i < rects.size(); i++)
-	{
-		int sum = 0;
-		for (Rect r : rects)
-		{
-			sum += std::max((int)(100000 - dist(r, rects[i])),0) * rects[i].area();
-		}
-		weights[i] = sum;
-	}
-
-	return rects[std::max_element(weights.begin(), weights.end()) - weights.begin()];*/
 }
 
 void getExternalContours(Contours const& contours, vector<Rect>* retRects, Hierarchy const& hierarchy, int const idx)
@@ -131,21 +107,11 @@ void DetectMotion(){
 						if (vip.area() > 100 && Rect(100, 100, 640 - 200, 480 - 200).contains(Point(vip.x + vip.width / 2, vip.y + vip.height / 2)))
 						{
 							cv::rectangle(frame, vip, cv::Scalar(0, 255, 255), 4);
-							//for (int x = -10; x < 10; x += 2)
+							if (locating && adding)
 							{
-								//for (int y = -10; y < 10; y += 2)
-								{
-									if (locating && adding)
-									{
-										flow.addPoint(vip.x + vip.width / 2
-											//+x
-											, vip.y + vip.height / 2
-											//+y
-											);
-									}
-								}
+								flow.addPoint(vip.x + vip.width / 2, vip.y + vip.height / 2);
 							}
-
+							
 							locating = false;
 						}
 					}
@@ -163,13 +129,11 @@ void DetectMotion(){
 				locating = true;
 			}
 			if (started){
-				//imshow("back", back);
 				imshow("delta", delta);
 				cv::moveWindow("back", 0, 480);
 				cv::moveWindow("delta", 640, 0);
 			}
 
 			imshow("main", frame);
-			//cv::moveWindow("main", 0, 0);
 	}
 }

@@ -7,28 +7,13 @@
 #include <ctype.h>
 
 #include "opticalFlow.h"
+#include "turret.h"
 
 using namespace cv;
 using namespace std;
 
 Point2f point;
 bool addRemovePt = false;
-
-void TurnLeft(){
-	cout << "TurnLeft"<<endl;
-}
-
-void TurnRight(){
-	cout << "TurnRight" << endl;
-}
-
-void TurnUp(){
-	cout << "TurnUp" << endl;
-}
-
-void TurnDown(){
-	cout << "TurnDown" << endl;
-}
 
 void opticalFlow::addPoint(int x, int y)
 {
@@ -52,7 +37,7 @@ void opticalFlow::clearPoints(){
 }
 
 float dist(Point a, Point b){
-	return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y);
+	return (float)(a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y);
 }
 
 const int turningThreshold = 20;
@@ -111,15 +96,15 @@ bool opticalFlow::run(Mat& image)
 			}
 			auto target = getVIP(points[1]);
 			if (target.x > image.size().width / 2 + turningThreshold)
-				TurnLeft();
-			else if (target.y < image.size().height / 2 - turningThreshold)
-				TurnUp();
-			else if (target.x < image.size().width / 2 - turningThreshold)
-				TurnRight();
-			else if (target.y > image.size().height / 2 + turningThreshold)
-				TurnDown();
-			else
-				cout << "NOICE"<<endl;
+			{
+				turret::TurnLeft();
+			}
+			if (target.y < image.size().height / 2 - turningThreshold)
+				turret::TurnUp();
+			if (target.x < image.size().width / 2 - turningThreshold)
+				turret::TurnRight();
+			if (target.y > image.size().height / 2 + turningThreshold)
+				turret::TurnDown();
 
 			circle(image, target, 6, Scalar(0, 255, 0), -1, 8);
 		}
