@@ -1,5 +1,5 @@
-#include <opencv2\opencv.hpp>
-#include <opencv2\core\types_c.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/types_c.h>
 struct opticalFlow{
 	const cv::TermCriteria termcrit = cv::TermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03);
 	
@@ -19,5 +19,5 @@ struct opticalFlow{
 	void clearPoints();
 	opticalFlow();
 	bool run(cv::Mat& frame);
-	void opticalFlow::addPoint(int x, int y);
+	void addPoint(int x, int y);
 };

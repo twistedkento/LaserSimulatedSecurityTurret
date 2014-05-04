@@ -1,6 +1,7 @@
 extern void DetectMotion();
 
 #include <iostream>
-void main(){
+int main(){
 	DetectMotion();
+    return 0;
 }

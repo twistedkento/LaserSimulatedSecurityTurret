@@ -1,4 +1,4 @@
-#include <opencv2\opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include <array>
 #include "opticalFlow.h"
 
@@ -40,6 +40,9 @@ void getExternalContours(Contours const& contours, vector<Rect>* retRects, Hiera
 
 void DetectMotion(){
 	VideoCapture cap(0);
+    cap.set(CV_CAP_PROP_BRIGHTNESS, 0.65);
+    cap.set(CV_CAP_PROP_CONTRAST, 0.35);
+    cap.set(CV_CAP_PROP_EXPOSURE, 0.99);
 	int counts = 0;
 	Mat back;
 	cap >> back;
