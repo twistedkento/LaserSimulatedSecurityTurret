@@ -42,23 +42,23 @@ void CommunicationUDP::connect(void) {
         return;
     }
     struct timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = 200;
+    tv.tv_sec = 1;
+    tv.tv_usec = 0;
     setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 
 }
 
 void CommunicationUDP::sendCommand(Command command) {
     if (!is_thread_running) {
+        is_thread_running = true;
+        udp_response_thread.join();
+        udp_response_thread = std::thread([this]() {this->getResponse();});
         int numbytes;
         if ((numbytes = sendto(socketfd, command.getValue(), command.getValueSize(), 0,
             p->ai_addr, p->ai_addrlen)) == -1) {
             perror("CommunicationUDP::sendCommand");
             exit(1);
         }
-        is_thread_running = true;
-        udp_response_thread.join();
-        udp_response_thread = std::thread([this]() {this->getResponse();});
         //udp_response_thread.detach();
     } else {
         //std::cout << "Not running thread!" << std::endl;
@@ -85,7 +85,7 @@ void CommunicationUDP::getResponse(void) {
         printf("\n");
 
     } else {
-        printf("Received no data from server!");
+        printf("Received no data from server!\n");
     }
     is_thread_running = false;
 }
@@ -94,6 +94,7 @@ void CommunicationUDP::disconnect(void) {
     if (udp_response_thread.joinable()) {
         std::cout << "Joining thread" << std::endl;
         udp_response_thread.join();
+        std::cout << "Thread joined" << std::endl;
     }
     freeaddrinfo(servinfo);
     servinfo = 0;
