@@ -130,6 +130,7 @@ class TurretClass(object):
                 self.handle_command(msg)
         except KeyboardInterrupt:
             print("Exiting server loop")
+            p.join()
         finally:
             server.server_close()
 
