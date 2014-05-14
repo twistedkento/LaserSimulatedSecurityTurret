@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/mainclass"
+    android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<EditText
+		android:id="@+id/ipBtn"
+		android:text="x.x.x.x"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent" />
+
+	<org.jensenligan.turretcontrol.JoyStick
+		android:layout_below="@id/ipBtn"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+
+</RelativeLayout>
