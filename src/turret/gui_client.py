@@ -27,21 +27,21 @@ w.pack()
 
 keys = dict()
 coords = []
+data = command()
 i = 0
-x1 = 0
-y1 = 0
-x2 = 0
-y2 = 0
+x = 140
+y = 140
 
 def timer_function():
-    test_function()
     handle_tcp()
+    test_function()
     w.create_text((canvas_width/2,20),text=str(keys))
     master.after(20, timer_function)
 
 def handle_tcp():
     global laserstate
-    data = command()
+    #data = command()
+    global data
     if laserstate:
         data.laser = laser.on
     else:
@@ -69,20 +69,37 @@ def handle_tcp():
         pass
 
 def test_function():
-    global coords, i
+    global coords, i, x, y, data
     i += 1
-    x = int(100*math.sin(math.radians(i)*4 )) 
-    y = int(100*math.cos(math.radians(i)*4 ))
+    #print(data.servo_x)
+    if data.servo_x == 2:
+        x += 5
+    if data.servo_x == 1:
+        x -= 5
+    if data.servo_y == 2:
+        y += 5
+    if data.servo_y == 1:
+        y -= 5
+    #print(data.servo_y)
+    #print(data.laser)
+    #x = int(100*math.sin(math.radians(i)*4 )) 
+    #y = int(100*math.cos(math.radians(i)*4 ))
 
     coords.append((x,y))
 
     w.delete('all')
+    '''
     for a,b in zip([i for i in coords ],[i for i in coords[1:]]):
         w.create_line(a[0]*2+(canvas_width/2), a[1]*2+(canvas_height/2),
                 b[0]*2+(canvas_width/2), b[1]*2+(canvas_height/2),
                 fill="#476042", width=4)
+    '''
+    for a,b in zip([i for i in coords ],[i for i in coords[1:]]):
+        w.create_line(a[0],a[1],b[0],b[1],fill="#476042", width=4)
+
     if len(coords) > 10:
         coords.pop(0)
+    data = command()
 
 def KeyPressed(event):
     keys[event.keycode] = 1
