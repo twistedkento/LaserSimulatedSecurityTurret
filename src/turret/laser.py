@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sound
 
 class LaserClass(object):
     '''
@@ -36,5 +37,6 @@ class LaserClass(object):
         '''
         self.turn_on()
         #   TODO: Play speaker sound
+        sound.play_sound(0)
         #print("IMMA FIRIN' MA LAZOR!!!")
         self.turn_off()
