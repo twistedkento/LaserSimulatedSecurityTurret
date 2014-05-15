@@ -11,23 +11,20 @@ import android.view.MotionEvent;
 import android.util.Log;
 import java.net.Socket;
 import java.net.InetAddress;
-import java.io.PrintWriter;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import java.io.*;
 import android.os.AsyncTask;
 import java.lang.Void;
-import android.widget.Toast;
-import android.widget.EditText;
 
 public class JoyStick extends View implements OnTouchListener, Runnable
 {
-	private static final int S_UP = 1; 
-	private static final int L_UP = 5; 
-	private static final int R_UP = 9; 
+	private static final int S_LEFT = 4; 
+	private static final int S_RIGHT = 8; 
+	private static final int S_UP = 1;
 	private static final int S_DOWN = 2; 
+	private static final int L_UP = 5;
+	private static final int R_UP = 9;
 	private static final int L_DOWN = 6; 
-	private static final int R_DOWN = 8; 
+	private static final int R_DOWN = 10; 
 	private float cX = 0;
 	private float cY = 0;
 	private float height = 0;
@@ -35,10 +32,12 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 	private float fingerX = -500;
 	private float fingerY = -500;
 	private boolean touching = false;
-	private String IP = "129.16.192.96";
+	private String IP = null;
 	private int PORT = 9999;
 	public Socket socket;
 	public static boolean running = false;
+	private AsyncTask<Integer, Void, Void> hej = null;
+	public boolean laser = true;
 
 	public JoyStick()
 	{
@@ -54,6 +53,7 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 
 	private void connectToPi()
 	{
+		IP = getResources().getString(R.string.IP);
 		try
 		{
 			if(socket != null && socket.isConnected())
@@ -65,7 +65,8 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 		}
 	}
 
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+	{
 		width = MeasureSpec.getSize(widthMeasureSpec);
 		height = MeasureSpec.getSize(heightMeasureSpec);
 		cY = height / 2;
@@ -93,6 +94,12 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 		// vertical line
 		c.drawRect(0, cY-1, width, cY+1, p);
 		c.drawRect(cX-1, 0, cX+1, height, p);
+		c.drawRect(cX-1, 0, cX+1, height, p);
+		p.setColor(Color.RED);
+		c.drawLine(cX-20, 0, cX-20, height, p);
+		c.drawLine(cX+20, 0, cX+20, height, p);
+		c.drawLine(0, cY-20, width, cY-20, p);
+		c.drawLine(0, cY+20, width, cY+20, p);
 	}
 
 	public boolean onTouch(View v, MotionEvent me)
@@ -113,43 +120,111 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 
 	public void run()
 	{
-		Log.e("DATTA","RUN");
+		Log.e("DATTA",fingerX + "");
 		int var = 0;
 		if(touching)
 		{
-			if(fingerY > cY)
+			// up
+			if(fingerY < cY-20)
 			{
-				if(fingerX == cX)
+				if(fingerY > cY-20 && fingerY < cY+20)
+					var = S_UP;
+				else if(fingerX > cX-20 && fingerX < cX+20)
 					var = S_UP;
 				else if(fingerX > cX)
 					var = R_UP;
 				else
 					var = L_UP;
-
-			} else if(fingerY < cY){
-				if(fingerX == cX)
+			}
+			// down
+			else if(fingerY > cY+20)
+			{
+				if(fingerY > cY-20 && fingerY < cY+20)
 					var = S_DOWN;
-				else if(fingerX > cX)
+				if(fingerX > cX-20 && fingerX < cX+20)
+					var = S_DOWN;
+				else if(fingerX > cX+20)
 					var = R_DOWN;
-				else
+				else if(fingerX < cX-20)
 					var = L_DOWN;
 			}
-			new doStuff().execute(new Integer(var));
+			else if(fingerY > cY-20 && fingerY < cY+20)
+			{
+				if(fingerX < cX-20)
+					var = S_LEFT;
+				else if(fingerX > cX+20)
+					var = S_RIGHT;
+			}
+			if(hej == null)
+			{
+				hej = new doStuff().execute(new Integer(var));
+			} else if(hej.getStatus() == AsyncTask.Status.FINISHED)
+			{
+				hej = new doStuff().execute(new Integer(var));
+			}
 		}
 	}
 
-	private class doStuff extends AsyncTask<Integer, Void, Void> {
+	public void toggleLaser()
+	{
+		laser = !laser;
+	}
 
-		protected Void doInBackground(Integer... b) {
+	private int addLaserBit(int inp)
+	{
+		int[] bits = toBinaryBits(inp);
+		if(bits[4] == 0)
+			bits[4] = 1;
+		return toInteger(bits);
+	}
+
+	private int toInteger(int[] bits)
+	{
+		int ret = 0;
+		int[] b_vals = {128,64,32,16,8,4,2,1};
+		for(int i = 0; i < b_vals.length;i++)
+		{
+			if(bits[i] == 1)
+				ret+=b_vals[i];
+		}
+		return ret;
+	}
+
+	private int[] toBinaryBits(int input)
+	{
+		int[] bits = new int[8];
+		int remaining = input;
+		int index = 0;
+		for(int i = 128; i >= 1;i=i/2)
+		{
+			if(remaining >= i)
+			{
+				bits[index] = 1;
+				remaining -= i;
+			} else
+				bits[index] = 0;
+			index++;
+		}
+		return bits;
+	}
+
+	private class doStuff extends AsyncTask<Integer, Void, Void>
+	{
+
+		protected Void doInBackground(Integer... b)
+		{
 			if(JoyStick.running) {
 				try {
-					PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(JoyStick.this.socket.getOutputStream())));
+					int byt = b[0].intValue() << 4;
+					DataOutputStream out = new DataOutputStream(JoyStick.this.socket.getOutputStream());
 					Log.e("DATTA", Integer.toBinaryString(b[0] << 4));
-					out.print((byte) b[0].intValue() << 4);
+					if(JoyStick.this.laser)
+						byt = addLaserBit(byt);
+					out.writeByte(byt);
 					out.flush();
-					InputStream is = JoyStick.this.socket.getInputStream();
-					byte[] bajs = new byte[1];
-					is.read(bajs, 0, 1);
+					//InputStream is = JoyStick.this.socket.getInputStream();
+					//byte[] bajs = new byte[1];
+					//is.read(bajs, 0, 1);
 				} catch(Exception e) {
 					connectToPi();
 					Log.e("SOCKET", "error sending");
@@ -158,17 +233,17 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 			return null;
 		}
 
-		protected void onPreExecute(){
+		protected void onPreExecute()
+		{
 			super.onPreExecute();
 			if(!JoyStick.running) 
 				JoyStick.running = true;
 		}
 
-		protected void onPostExecute(Void bajs) {
+		protected void onPostExecute(Void bajs)
+		{
 			super.onPostExecute(bajs);
 			JoyStick.running = false;
 		}
-
 	}
-
 }
