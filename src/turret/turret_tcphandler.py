@@ -14,6 +14,7 @@ class TurretTCPHandler(socketserver.BaseRequestHandler):
                     break
                 self.server.command_queue.put(command(data))
             except:
+                print("ERRORRAZ")
                 break
 
             #Sending ok signal!

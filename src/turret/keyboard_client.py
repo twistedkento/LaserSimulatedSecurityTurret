@@ -16,7 +16,8 @@ if __name__ == '__main__':
 
     laserstate = True
 
-    HOST, PORT = "localhost", 9999
+    #HOST, PORT = "129.16.194.203", 9999
+    HOST, PORT = "127.1", 9999
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
