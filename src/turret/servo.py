@@ -5,10 +5,12 @@ import random
 import sys
 import math
 
-class ServoClass(object):
+
+class ServoClass:
     '''
         Representer of a servo connected at pin "pin"
     '''
+
     def save_decorator(f):
         def inner_func(self, *args, **kw):
             try:
@@ -31,12 +33,12 @@ class ServoClass(object):
     def __str__(self):
         return "Servo nr: {0}, Angle: {1}".format(self.pin, self.angle)
 
-    def reset(self):
+    @save_decorator
+    def angle_reset(self):
         '''
             Return to start value
         '''
         self.angle = self.__start_value
-        self.do_save()
 
     @save_decorator
     def increase(self):

@@ -4,11 +4,12 @@
 import sys
 import socketserver
 from multiprocessing import Process, Queue
-from turret_tcphandler import TurretTCPHandler
+from turret_udphandler import TurretUDPHandler
 from turret_command import TurretCommand as command
 from servo import ServoClass
 from laser import LaserClass
 from camera import CameraClass
+import pdb
 
 class TurretClass(object):
     '''
@@ -17,8 +18,8 @@ class TurretClass(object):
     def __init__(self):
         super(TurretClass, self).__init__()
         self.laser = LaserClass()
-        self.servo_x = ServoClass(0)
-        self.servo_y = ServoClass(1)
+        self.servo_x = ServoClass(pin=0)
+        self.servo_y = ServoClass(pin=1)
         self.camera = CameraClass()
         self.manualmode = False
 
@@ -26,12 +27,12 @@ class TurretClass(object):
         laserstate = command.LaserState
         self.command_calls = dict()
         self.command_calls['servo_x'] = {
-                servostate.inc : self.turn_right,
+                servostate.inc: self.turn_right,
                 servostate.dec: self.turn_left,
                 servostate.off: lambda: None,
                 servostate.reset: self.horizontal_reset}
         self.command_calls['servo_y'] = {
-                servostate.inc : self.turn_up,
+                servostate.inc: self.turn_up,
                 servostate.dec: self.turn_down,
                 servostate.off: lambda: None,
                 servostate.reset: self.vertical_reset}
@@ -51,11 +52,11 @@ class TurretClass(object):
         '''
         self.servo_x.decrease()
 
-    def vertical_reset(self):
+    def horizontal_reset(self):
         '''
-            Returns turret to initial vertical state
+            Returns turret to initial horizontal state
         '''
-        self.servo_x.reset()
+        self.servo_x.angle_reset()
 
     def turn_up(self):
         '''
@@ -69,11 +70,11 @@ class TurretClass(object):
         '''
         self.servo_y.decrease()
 
-    def horizontal_reset(self):
+    def vertical_reset(self):
         '''
-            Returns turret to initial horizontal state
+            Returns turret to initial vertical state
         '''
-        self.servo_y.reset()
+        self.servo_y.angle_reset()
 
     def get_angle(self):
         '''
@@ -119,7 +120,7 @@ class TurretClass(object):
             Main loop that handles the turret.
         '''
         HOST, PORT = "0.0.0.0", 9999
-        server = socketserver.TCPServer((HOST, PORT), TurretTCPHandler)
+        server = socketserver.UDPServer((HOST, PORT), TurretUDPHandler)
         try:
             server.command_queue = Queue()
             server.connected_clients = 0
