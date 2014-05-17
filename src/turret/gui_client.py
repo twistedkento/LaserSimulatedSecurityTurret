@@ -13,7 +13,7 @@ laser = command.LaserState
 
 laserstate = True
 
-HOST, PORT = "localhost", 9999
+HOST, PORT = "129.16.197.34", 9999
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 master = Tk()
@@ -42,10 +42,10 @@ def handle_tcp():
     global laserstate
     #data = command()
     global data
-    if laserstate:
-        data.laser = laser.on
-    else:
-        data.laser = laser.off
+    #if laserstate:
+    #    data.laser = laser.on
+    #else:
+    #    data.laser = laser.off
     if 113 in keys and keys[113]:
         data.servo_x = servo.inc
     if 114 in keys and keys[114]:
@@ -54,19 +54,22 @@ def handle_tcp():
         data.servo_y = servo.inc
     if 116 in keys and keys[116]:
         data.servo_y = servo.dec
+    data.laser = laser.off
+    print(data.laser)
     if False:
-        laserstate = not laserstate
-        if laserstate:
-            data.laser = laser.on
-        else:
-            data.laser = laser.off
-    sock.send(bytes(data))
-    status = sock.recv(1)
-    try:
-        if not int.from_bytes(status, 'little'):
-            sys.exit()
-    except:
-        pass
+        laserstate = laser.off
+        #if laserstate:
+        #    data.laser = laser.on
+        #else:
+        #    data.laser = laser.off
+    if (not data.servo_x == 0 and not data.servo_y == 0):
+        sock.send(bytes(data))
+        status = sock.recv(1)
+        try:
+            if not int.from_bytes(status, 'little'):
+                sys.exit()
+        except:
+            pass
 
 def test_function():
     global coords, i, x, y, data
