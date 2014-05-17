@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <iostream>
-#include <cassert>
 
 #include "comm_udp.h"
 #include "command.h"
@@ -29,14 +28,11 @@ int main(int argc, char *argv[]) {
     com.setServoX(Command::CommandState::SERVO_INCREASE);
     com.setLaser(Command::CommandState::LASER_ON);
 
-    struct timespec ts, ts2;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 500000000L;
-    CommunicationUDP server("127.0.0.1", "4950");
-    server.connect();
+
+    CommunicationUDP server("127.0.0.1", "9999");
+    server.connect_udp();
     for (int i = 0; i <= 10; ++i) {
         server.sendCommand(com);
-        nanosleep(&ts, &ts2);
     }
     server.disconnect();
 

@@ -2,13 +2,24 @@
 #define __COMM_UDP_H__
 
 #include <string>
+#include <thread>
+#include "command.h"
+
+#ifdef _WIN32
+
+#include <windows.h>
+
+#elif __linux
+
+#include <unistd.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <thread>
-#include "command.h"
+
+#endif
 
 class CommunicationUDP {
     private:
@@ -23,7 +34,7 @@ class CommunicationUDP {
     public:
         CommunicationUDP(std::string hostname, std::string port);
         ~CommunicationUDP();
-        void connect(void);
+        void connect_udp(void);
         void sendCommand(Command);
         void getResponse(void);
         void disconnect(void);
