@@ -1,25 +1,14 @@
 #include "turret.h"
 #include <string>
-
-std::string turret::turn_left = filesystem::open("turn_left.py");
-std::string turret::turn_right = filesystem::open("turn_right.py");
-std::string turret::turn_up = filesystem::open("turn_up.py");
-std::string turret::turn_down = filesystem::open("turn_down.py");
-
-python turret::pythonclient;
-
 #include <iostream>
 
+Turret::Turret() : connection("129.16.199.120","9999") {
+    connection.connect_udp();
+}
+Turret::~Turret() {
+    connection.disconnect();
+}
 
-void turret::TurnLeft(){
-	pythonclient.run(turn_left);
-}
-void turret::TurnRight(){
-	pythonclient.run(turn_right);
-}
-void turret::TurnUp(){
-	pythonclient.run(turn_up);
-}
-void turret::TurnDown(){
-	pythonclient.run(turn_down);
+void Turret::send(Command com){
+    connection.sendCommand(com);
 }

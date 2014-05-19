@@ -7,7 +7,8 @@
 #include <ctype.h>
 
 #include "opticalFlow.h"
-#include "turret.h"
+//#include "turret.h"
+#include "command.h"
 
 using namespace cv;
 using namespace std;
@@ -95,16 +96,16 @@ bool opticalFlow::run(Mat& image)
 				//circle(image, points[1][i], 3, Scalar(0, 255, 0), -1, 8);
 			}
 			auto target = getVIP(points[1]);
+            Command com;
 			if (target.x > image.size().width / 2 + turningThreshold)
-			{
-				turret::TurnLeft();
-			}
+                com.setServoX(Command::CommandState::SERVO_DECREASE);
 			if (target.y < image.size().height / 2 - turningThreshold)
-				turret::TurnUp();
+                com.setServoY(Command::CommandState::SERVO_DECREASE);
 			if (target.x < image.size().width / 2 - turningThreshold)
-				turret::TurnRight();
+                com.setServoX(Command::CommandState::SERVO_INCREASE);
 			if (target.y > image.size().height / 2 + turningThreshold)
-				turret::TurnDown();
+                com.setServoY(Command::CommandState::SERVO_INCREASE);
+            turret.send(com);
 
 			circle(image, target, 6, Scalar(0, 255, 0), -1, 8);
 		}
