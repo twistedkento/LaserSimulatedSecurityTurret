@@ -18,7 +18,7 @@ class TurretCommand(object):
             self.__value = value
 
     def __int__(self):
-        return self.__value
+        return self.__value & 0xff
 
     def __str__(self):
         return ('Servo X: ' + str(self.servo_x) + '\n'
@@ -40,33 +40,33 @@ class TurretCommand(object):
     #Descriptors for everything!!!
     #A quote stemming from Socrates explains why: Because i was bored!
     def __getx(self):
-        return (self.__value & ((2 ** 6) | (2 ** 7))) >> 6
+        return (self.__value & 0xc0) >> 6
     def __setx(self, value):
         try:
             value = value.value
         except:
             pass
-        self.__value = (self.__value & (255 ^ ((2**7) | (2**6))) | ((value & 3) << 6))
+        self.__value = (self.__value & (255 ^ 0xc0) | ((value & 3) << 6))
     servo_x = property(__getx, __setx, None, '')
 
     def __gety(self):
-        return (self.__value & ((2 ** 4) | (2 ** 5))) >> 4
+        return (self.__value & 0x30) >> 4
     def __sety(self, value):
         try:
             value = value.value
         except:
             pass
-        self.__value = (self.__value & (255 ^ ((2**4) | (2**5))) | (((value &  3)) << 4))
+        self.__value = (self.__value & (255 ^ 0x30) | (((value &  3)) << 4))
     servo_y = property(__gety, __sety, None, '')
 
     def __getlaser(self):
-        return (self.__value & (2 ** 3)) >> 3
+        return (self.__value & 0x8) >> 3
     def __setlaser(self, value):
         try:
             value = value.value
         except:
             pass
-        self.__value = (self.__value & (255 ^ (2**3)) | ((value & 1) << 3))
+        self.__value = (self.__value & (255 ^ 0x8) | ((value & 1) << 3))
     laser = property(__getlaser, __setlaser, None, '')
 
     encode = lambda x: x.to_bytes(1, byteorder='little')
