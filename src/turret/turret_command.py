@@ -10,6 +10,9 @@ class TurretCommand(object):
     class LaserState(Enum):
         off = 0
         on = 1
+    class ExtraState(Enum):
+        off = 0
+        camera = 1
 
     def __init__(self, value=0):
         if isinstance(value, bytes):
@@ -68,6 +71,16 @@ class TurretCommand(object):
             pass
         self.__value = (self.__value & (255 ^ 0x8) | ((value & 1) << 3))
     laser = property(__getlaser, __setlaser, None, '')
+
+    def __getextra(self):
+        return self.__value & 7
+    def __setextra(self, value):
+        try:
+            value = value.value
+        except:
+            pass
+        self.__value = (self.__value & (255 ^ 7) | (value & 7))
+    extra = property(__getextra, __setextra, None, '')
 
     encode = lambda x: x.to_bytes(1, byteorder='little')
     decode = lambda x: int.from_bytes(x, byteorder='little')

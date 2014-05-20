@@ -8,7 +8,7 @@ from turret_udphandler import TurretUDPHandler
 from turret_command import TurretCommand as command
 from servo import ServoClass
 from laser import LaserClass
-from camera import CameraClass
+from camera_handler import CameraHandler
 import pdb
 
 class TurretClass(object):
@@ -20,11 +20,12 @@ class TurretClass(object):
         self.laser = LaserClass()
         self.servo_x = ServoClass(pin=0)
         self.servo_y = ServoClass(pin=1)
-        self.camera = CameraClass()
+        self.camera_handler = CameraHandler()
         self.manualmode = False
 
         servostate = command.ServoState
         laserstate = command.LaserState
+        extrastate = command.ExtraState
         self.command_calls = dict()
         self.command_calls['servo_x'] = {
                 servostate.inc: self.turn_right,
@@ -39,6 +40,9 @@ class TurretClass(object):
         self.command_calls['laser'] = {
                 laserstate.on: self.laser.turn_on,
                 laserstate.off : self.laser.turn_off}
+        self.command_calls['extra'] = {
+                extrastate.off: lambda x: None,
+                extrastate.camera: self.call_camera}
 
     def turn_left(self):
         '''
@@ -103,17 +107,24 @@ class TurretClass(object):
         '''
         self.manualmode = not self.manualmode
         print("Manualmode: " + str(self.manualmode))
+    def call_camera(self, caddr):
+        '''
+        '''
+        self.camera_handler.send_camera(caddr)
+        
     
-    def handle_command(self, in_command):
+    def handle_command(self, in_command,caddr=None):
         '''
             Handles the command input sent from the client
         '''
         servostate = command.ServoState
         laserstate = command.LaserState
+        extrastate = command.ExtraState
 
         self.command_calls['servo_x'][servostate(in_command.servo_x)]()
         self.command_calls['servo_y'][servostate(in_command.servo_y)]()
         self.command_calls['laser'][laserstate(in_command.laser)]()
+        self.command_calls['extra'][extrastate(in_command.extra)](caddr)
 
     def run(self):
         '''
@@ -127,8 +138,8 @@ class TurretClass(object):
             p = Process(target=server.serve_forever)
             p.start()
             while True:
-                msg = server.command_queue.get()
-                self.handle_command(msg)
+                msg,extra_info = server.command_queue.get()
+                self.handle_command(msg,caddr=extra_info)
         except KeyboardInterrupt:
             print("Exiting server loop")
             p.join()
