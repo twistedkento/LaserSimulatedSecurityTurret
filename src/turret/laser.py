@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sound
+from sound import Sound
+import RPi.GPIO as GPIO
+import threading
 
 class LaserClass(object):
     '''
@@ -10,20 +12,24 @@ class LaserClass(object):
     def __init__(self):
         super(LaserClass, self).__init__()
         self.__powerstate = False
+        self.__sound = Sound()
+        self.__pin=26
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.__pin, GPIO.OUT)
 
     def turn_on(self):
         '''
             Turns laser on
         '''
         self.__powerstate = True
-        #   TODO : Turn on laser 
+        GPIO.output(self.__pin, True)
 
     def turn_off(self):
         '''
             Turns laser off
         '''
         self.__powerstate = False
-        #   TODO : Turn off laser
+        GPIO.output(self.__pin, False)
 
     def get_powerstate(self):
         '''
@@ -36,7 +42,10 @@ class LaserClass(object):
             Turns on and off laser + beeps
         '''
         self.turn_on()
-        #   TODO: Play speaker sound
-        sound.play_sound(0)
-        #print("IMMA FIRIN' MA LAZOR!!!")
-        self.turn_off()
+        self.__sound.play_sound("laser")
+        t = threading.Timer(2, self.turn_off)
+        t.start()
+        
+    def cleanup(self):
+        GPIO.cleanup(self.__pin)
+

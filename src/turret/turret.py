@@ -133,6 +133,7 @@ class TurretClass(object):
             print("Exiting server loop")
             p.join()
         finally:
+            laser.cleanup()
             server.server_close()
 
 
