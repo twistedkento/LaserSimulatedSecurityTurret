@@ -49,12 +49,15 @@ int main(int argc, char *argv[]) {
                     switch (event.type) {
                         case SDL_JOYAXISMOTION:
                             procent = (event.jaxis.value/32767.0);
-                            printf("Joystick %d axis %d value: %f\n",
+                            /*printf("Joystick %d axis %d value: %f\n",
                                    event.jaxis.which,
-                                   event.jaxis.axis, procent);
+                                   event.jaxis.axis, procent);*/
 
                             //com = Command();
                             if (event.jaxis.axis == 0) {
+                                printf("Joystick %d axis %d value: %f\n",
+                                       event.jaxis.which,
+                                       event.jaxis.axis, procent);
                                 if (procent >= 0.1) {
                                     com.setServoX(Command::CommandState::SERVO_INCREASE);
                                 } else if (procent <= -0.1) {
@@ -63,6 +66,9 @@ int main(int argc, char *argv[]) {
                                     com.setServoX(Command::CommandState::SERVO_OFF);
                                 }
                             } else if (event.jaxis.axis == 1) {
+                                printf("Joystick %d axis %d value: %f\n",
+                                       event.jaxis.which,
+                                       event.jaxis.axis, procent);
                                 if (procent >= 0.1) {
                                     com.setServoY(Command::CommandState::SERVO_INCREASE);
                                 } else if (procent <= -0.1) {

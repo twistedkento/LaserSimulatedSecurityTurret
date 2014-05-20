@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.util.Log;
-import java.net.Socket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.io.*;
 import android.os.AsyncTask;
@@ -34,7 +34,7 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 	private boolean touching = false;
 	private String IP = null;
 	private int PORT = 9999;
-	public Socket socket;
+	public DatagramSocket socket;
 	public static boolean running = false;
 	private AsyncTask<Integer, Void, Void> hej = null;
 	public boolean laser = true;
@@ -59,7 +59,7 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 			if(socket != null && socket.isConnected())
 				socket.close();
 			InetAddress addr = InetAddress.getByName(IP);
-			socket = new Socket(addr, PORT);
+			socket = new DatagramSocket(PORT,addr);
 		} catch(Exception e) {
 			Log.e("SOCKET", "could not connect to " + IP);
 		}

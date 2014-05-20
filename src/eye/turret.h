@@ -1,18 +1,16 @@
-#pragma once
-#include "python.h"
+//#pragma once
+//#include "python.h"
+#include "comm_udp.h"
+#include "command.h"
 
-namespace turret
+class Turret
 {
-	extern std::string  turn_left;
-	extern std::string  turn_right;
-	extern std::string  turn_up;
-	extern std::string turn_down;
-	
-	extern python pythonclient;
+    public:
+        Turret();
+        ~Turret();
 
-	void TurnLeft();
-	void TurnRight();
-	void TurnUp();
-	void TurnDown();
+        void send(Command);
+    private:
+        CommunicationUDP connection;
 };
 
