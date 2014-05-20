@@ -20,6 +20,10 @@ void Command::setLaser(CommandState state) {
     data[0] = (data[0] & 0xf7) | (((char)state & 1) << 3);
 }
 
+void Command::setExtra(CommandState state) {
+    data[0] = (data[0] & 0xf8) | ((char)state & 7);
+}
+
 const char* Command::getValue(void) {
     return data;
 }

@@ -13,11 +13,13 @@ class Command {
             SERVO_DECREASE = 2,
             SERVO_RESET = 3,
             LASER_OFF = 0,
-            LASER_ON = 1
+            LASER_ON = 1,
+            EXTRA_CAMERA = 1
         };
         void setServoX(CommandState);
         void setServoY(CommandState);
         void setLaser(CommandState);
+        void setExtra(CommandState);
         const char* getValue(void);
         int getValueSize(void);
         void reset(void);
