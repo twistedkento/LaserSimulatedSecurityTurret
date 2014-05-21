@@ -7,7 +7,8 @@ class Sound(object):
     '''
     
     def __init__(self):
-        self.path = "/home/turret/"
+        from os.path import expanduser
+        self.path = expanduser('~')
         self.sounds = dict()
         self.load_sounds()
     

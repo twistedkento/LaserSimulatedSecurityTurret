@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from sound import Sound
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    pass
 import threading
 
 class LaserClass(object):
@@ -14,22 +17,31 @@ class LaserClass(object):
         self.__powerstate = False
         self.__sound = Sound()
         self.__pin=26
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.__pin, GPIO.OUT)
+        try:
+            GPIO.setmode(GPIO.BOARD)
+            GPIO.setup(self.__pin, GPIO.OUT)
+        except:
+            pass
 
     def turn_on(self):
         '''
             Turns laser on
         '''
         self.__powerstate = True
-        GPIO.output(self.__pin, True)
+        try:
+            GPIO.output(self.__pin, True)
+        except:
+            pass
 
     def turn_off(self):
         '''
             Turns laser off
         '''
         self.__powerstate = False
-        GPIO.output(self.__pin, False)
+        try:
+            GPIO.output(self.__pin, False)
+        except:
+            pass
 
     def get_powerstate(self):
         '''
@@ -47,5 +59,8 @@ class LaserClass(object):
         t.start()
         
     def cleanup(self):
-        GPIO.cleanup(self.__pin)
+        try:
+            GPIO.cleanup(self.__pin)
+        except:
+            pass
 
