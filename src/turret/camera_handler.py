@@ -21,6 +21,6 @@ class CameraHandler(object):
             self.__send_command.terminate()
             self.__connected_client = None
         else:
-            self.__video_command = Popen(['/opt/vc/bin/raspivid', '-u', '-n','-w','800','-h','-fps','24','-t','0','-o','-'], stdout=PIPE, close_fds=False)
+            self.__video_command = Popen(['/opt/vc/bin/raspivid', '-n','-w','800','-h', '600','-fps','24','-t','0','-o','-'], stdout=PIPE, close_fds=False)
             self.__send_command = Popen(['socat', '-', 'udp-sendto:' + caddr[0] + ':' + str(caddr[1]) ], stdin=self.__video_command.stdout,close_fds=False)
             self.__connected_client = caddr[0]
