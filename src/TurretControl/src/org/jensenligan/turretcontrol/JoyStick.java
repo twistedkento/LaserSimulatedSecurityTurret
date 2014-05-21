@@ -9,9 +9,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.util.Log;
+
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Arrays;
+
 import android.os.AsyncTask;
 import java.lang.Void;
 
@@ -62,6 +67,7 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 			socket = new DatagramSocket(PORT,addr);
 		} catch(Exception e) {
 			Log.e("SOCKET", "could not connect to " + IP);
+			Log.e("SOCKET", e.getMessage());
 		}
 	}
 
@@ -120,7 +126,7 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 
 	public void run()
 	{
-		Log.e("DATTA",fingerX + "");
+		//Log.e("DATTA",fingerX + "");
 		int var = 0;
 		if(touching)
 		{
@@ -213,22 +219,26 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 
 		protected Void doInBackground(Integer... b)
 		{
-			if(JoyStick.running) {
-				try {
-					int byt = b[0].intValue() << 4;
-					DataOutputStream out = new DataOutputStream(JoyStick.this.socket.getOutputStream());
-					Log.e("DATTA", Integer.toBinaryString(b[0] << 4));
-					if(JoyStick.this.laser)
-						byt = addLaserBit(byt);
-					out.writeByte(byt);
-					out.flush();
-					//InputStream is = JoyStick.this.socket.getInputStream();
-					//byte[] bajs = new byte[1];
-					//is.read(bajs, 0, 1);
-				} catch(Exception e) {
-					connectToPi();
-					Log.e("SOCKET", "error sending");
-				}
+			try {
+				int byt = b[0].intValue() << 4;
+				//DataOutputStream out = new DataOutputStream(JoyStick.this.socket.getOutputStream());
+				Log.e("DATTA", "" + byt);
+				if(JoyStick.this.laser)
+					byt = addLaserBit(byt);
+				byte[] by = ByteBuffer.allocate(4).putInt(byt).array();
+				Log.e("SOCKET", Arrays.toString(by));
+				DatagramSocket so = new DatagramSocket();
+				so.send(new DatagramPacket(by, 3, 1, InetAddress.getByName(IP), PORT));
+				so.close();
+				//out.writeByte(byt);
+				//out.flush();
+				//InputStream is = JoyStick.this.socket.getInputStream();
+				//byte[] bajs = new byte[1];
+				//is.read(bajs, 0, 1);
+			} catch(Exception e) {
+				connectToPi();
+				Log.e("SOCKET", "error sending");
+				Log.e("SOCKET", "" + e.getMessage());
 			}
 			return null;
 		}
