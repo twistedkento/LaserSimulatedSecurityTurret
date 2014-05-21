@@ -55,7 +55,7 @@ class LaserClass(object):
         '''
         self.turn_on()
         self.__sound.play_sound("laser")
-        t = threading.Timer(2, self.turn_off)
+        t = threading.Timer(0.5, self.turn_off)
         t.start()
         
     def cleanup(self):

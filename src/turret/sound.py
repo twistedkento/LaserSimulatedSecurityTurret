@@ -12,8 +12,8 @@ class Sound(object):
         self.sounds = dict()
         self.load_sounds()
     
-    def play_sound(self, index):
-        self.player = subprocess.Popen(["mplayer", self.path + self.sounds[index]], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    def play_sound(self, name):
+        self.player = subprocess.Popen(["mplayer", self.path + self.sounds[name]], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
         
     def load_sounds(self):
