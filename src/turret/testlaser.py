@@ -16,9 +16,12 @@ class unit_tests_laser(unittest.TestCase):
         '''
             Test if laser can fire
         '''
+        for i in range(9):
+            self.laser.fire()
+            time.sleep(1)
         self.laser.fire()
         self.assertTrue(self.laser.get_powerstate())
-        time.sleep(3)
+        time.sleep(1)
         self.laser.cleanup()
 
 if __name__ == '__main__':

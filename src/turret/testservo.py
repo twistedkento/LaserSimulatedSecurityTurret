@@ -22,8 +22,8 @@ class unit_tests_servo(unittest.TestCase):
             time.sleep(0.01)
         self.assertTrue(self.servo.angle <= self.servo._ServoClass__max_value)
         self.assertTrue(self.servo.angle >= self.servo._ServoClass__min_value)
-        self.servo.reset()
-        self.servob.reset()
+        self.servo.angle_reset()
+        self.servob.angle_reset()
 
 if __name__ == '__main__':
     unittest.main(buffer=True, verbosity=2)
