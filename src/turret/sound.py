@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-class Sound(object):
+class SoundClass(object):
     '''
         Class that handles sound
     '''

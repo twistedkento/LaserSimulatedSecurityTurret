@@ -3,13 +3,13 @@
 
 import unittest
 import time
-from sound import Sound
+from sound import SoundClass
 
 class unit_tests_sound(unittest.TestCase):
 
     def __init__(self, *args):
         super(unit_tests_sound, self).__init__(*args)
-        self.sound = Sound()
+        self.sound = SoundClass()
 
     def test_sound(self):
         '''

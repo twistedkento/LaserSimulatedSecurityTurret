@@ -8,6 +8,7 @@ from turret_udphandler import TurretUDPHandler
 from turret_command import TurretCommand as command
 from servo import ServoClass
 from laser import LaserClass
+from sound import SoundClass
 from camera_handler import CameraHandler
 import pdb
 
@@ -21,6 +22,7 @@ class TurretClass(object):
         self.servo_x = ServoClass(pin=0)
         self.servo_y = ServoClass(pin=1)
         self.camera_handler = CameraHandler()
+        self.sound = SoundClass()
         self.manualmode = False
 
         servostate = command.ServoState
@@ -91,6 +93,7 @@ class TurretClass(object):
             Fire the laser
         '''
         self.laser.fire()
+        self.sound.play_sound("laser")
 
     def restart(self):
         '''

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from sound import Sound
 try:
     import RPi.GPIO as GPIO
 except:
@@ -15,7 +14,6 @@ class LaserClass(object):
     def __init__(self):
         super(LaserClass, self).__init__()
         self.__powerstate = False
-        self.__sound = Sound()
         self.__pin=26
         try:
             GPIO.setmode(GPIO.BOARD)
@@ -54,7 +52,6 @@ class LaserClass(object):
             Turns on and off laser + beeps
         '''
         self.turn_on()
-        self.__sound.play_sound("laser")
         t = threading.Timer(0.5, self.turn_off)
         t.start()
         
