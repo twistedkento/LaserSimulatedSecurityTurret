@@ -4,6 +4,8 @@
 #include <string>
 #include <thread>
 #include "command.h"
+#include <fcntl.h>
+#include <sys/types.h>
 
 #ifdef _WIN32
 
@@ -12,8 +14,6 @@
 #elif __linux
 
 #include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -28,9 +28,9 @@ class CommunicationUDP {
         std::string port;
         bool is_thread_running;
         std::thread udp_response_thread;
-        struct addrinfo *servinfo;
-        struct addrinfo *p;
-        struct addrinfo hints;
+        addrinfo *servinfo;
+        addrinfo *p;
+        addrinfo hints;
     public:
         CommunicationUDP(std::string hostname, std::string port);
         ~CommunicationUDP();
