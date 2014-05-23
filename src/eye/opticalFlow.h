@@ -12,7 +12,10 @@ struct opticalFlow{
 	bool nightMode = false;
 	bool hasFace = false;
 
-
+	int eigen = 1;
+	int epsilon = 3;
+	
+	cv::Mat frame;
 	cv::Mat gray;
 	cv::Mat prevGray;
 
@@ -20,6 +23,6 @@ struct opticalFlow{
 
 	void clearPoints();
 	opticalFlow();
-	bool run(cv::Mat& frame);
+	bool run(cv::Mat frame);
 	void addPoint(int x, int y);
 };
