@@ -16,7 +16,7 @@ class unit_tests_sound(unittest.TestCase):
             Tests sound
         '''
         self.sound.play_sound("laser")
-        time.sleep(0.5)
+        time.sleep(2)
 
 if __name__ == '__main__':
     unittest.main(buffer=True, verbosity=2)
