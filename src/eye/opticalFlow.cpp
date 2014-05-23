@@ -7,8 +7,9 @@
 #include <ctype.h>
 
 #include "opticalFlow.h"
-//#include "turret.h"
 #include "command.h"
+#include <Windows.h>
+#include "contour.h"
 
 using namespace cv;
 using namespace std;
@@ -29,6 +30,9 @@ opticalFlow::opticalFlow(){
 	subPixWinSize = Size(10, 10);
 	winSize = Size(31, 31);
 	needToInit = false;
+	namedWindow("main");
+	createTrackbar("eigentresh", "main", &eigen, 20);
+	createTrackbar("epsilon", "main", &epsilon, 20);
 }
 
 
@@ -43,59 +47,39 @@ float dist(Point a, Point b){
 
 const int turningThreshold = 20;
 
-cv::Point getVIP(vector<Point2f> points){
-	vector<int> weights(points.size());
-
-	for (int i = 0; i < points.size(); i++)
-	{
-		int sum = 0;
-		for (Point2f r : points)
-		{
-			sum += std::max((int)(100000 - dist(r, points[i])), 0);
-		}
-		weights[i] = sum;
-	}
-
-	return points[std::max_element(weights.begin(), weights.end()) - weights.begin()];
-}
-
-bool opticalFlow::run(Mat& image)
+bool opticalFlow::run(Mat image)
 {
+		frame = image;
 		cvtColor(image, gray, COLOR_BGR2GRAY);
 
-		if (needToInit)
-		{
-			// automatic initialization
-			goodFeaturesToTrack(gray, points[1], MAX_COUNT, 0.01, 10, Mat(), 3, 0, 0.04);
-			cornerSubPix(gray, points[1], subPixWinSize, Size(-1, -1), termcrit);
-			addRemovePt = false;
-			needToInit = false;
-		}
 		if (!points[0].empty())
 		{
+			Mat edges;
+			Mat copy = image.clone();
+
+			int thresh = 50;
+			
 			vector<uchar> status;
 			vector<float> err;
-			if (prevGray.empty())
-				gray.copyTo(prevGray);
-			calcOpticalFlowPyrLK(prevGray, gray, points[0], points[1], status, err, winSize,
-				3, termcrit, 0, 0.001);
-			size_t i, k;
-			for (i = k = 0; i < points[1].size(); i++)
+			if (!prevGray.empty())
 			{
-				if (dist(points[0][i], points[1][i]) < 0.1f){
-					//cout << "Resetting"<<endl;
-					//return false;
-				}
+				circle(image, points[0][0], 3, Scalar(0, 255, 0), -1, 8);
+				
+				vector<Mat> prevPyr;// = prevGray.clone();
+				vector<Mat> nextPyr;// = gray.clone();
+				const cv::TermCriteria termcrit = cv::TermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, double(epsilon) / 100.0);
+				calcOpticalFlowPyrLK(prevGray, gray, points[0], points[1], status, err, winSize, 50, termcrit, 0, double(eigen) / 1000.0);
+				size_t i, k;
+				
+				if (!Rect(-20, -20, image.size().height, image.size().width + 40).contains(points[1][0])){
+						std::cout << "Outside \n";
+						clearPoints();
+						cv::swap(prevGray, gray);
+						return false;
+					}
 
-				if (!Rect(50, 50, image.size().height - 100, image.size().width - 100).contains(points[1][i])){
-					clearPoints();
-					cv::swap(prevGray, gray);
-					return false;
-				}
-
-				//circle(image, points[1][i], 3, Scalar(0, 255, 0), -1, 8);
-			}
-			auto target = getVIP(points[1]);
+				circle(image, points[1][0], 3, Scalar(0, 255, 0), -1, 8);
+				auto target = points[1][0];
             Command com;
 			if (target.x > image.size().width / 2 + turningThreshold)
                 com.setServoX(Command::CommandState::SERVO_DECREASE);
@@ -107,10 +91,10 @@ bool opticalFlow::run(Mat& image)
                 com.setServoY(Command::CommandState::SERVO_INCREASE);
             turret.send(com);
 
-			circle(image, target, 6, Scalar(0, 255, 0), -1, 8);
 		}
 		else
 		{
+			std::cout << "Empty \n";
 			clearPoints();
 			cv::swap(prevGray, gray);
 			return false;
