@@ -40,8 +40,8 @@ class TurretClass(object):
                 servostate.off: lambda: None,
                 servostate.reset: self.vertical_reset}
         self.command_calls['laser'] = {
-                laserstate.on: self.laser.turn_on,
-                laserstate.off : self.laser.turn_off}
+                laserstate.on: self.fire_laser,
+                laserstate.off: lambda: None}
         self.command_calls['extra'] = {
                 extrastate.off: lambda x: None,
                 extrastate.camera: self.call_camera}
@@ -92,8 +92,9 @@ class TurretClass(object):
         '''
             Fire the laser
         '''
-        self.laser.fire()
-        self.sound.play_sound("laser")
+        if self.laser.fire():
+            print("firing")
+            self.sound.play_sound("laser")
 
     def restart(self):
         '''
