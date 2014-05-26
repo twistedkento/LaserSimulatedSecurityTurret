@@ -7,16 +7,9 @@
 
 	<Button
 		android:id="@+id/laserBtn"
-		android:text="L4Z0R"
+		android:text="FIRE LASER"
 		android:layout_height="wrap_content"
-		android:layout_width="wrap_content" />
-	<Button
-		android:id="@+id/streamingBtn"
-		android:text="STR34M"
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:layout_toRightOf="@id/laserBtn" />
-
+		android:layout_width="fill_parent" />
 	<org.jensenligan.turretcontrol.JoyStick
 		android:id="@+id/joystickview"
 		android:layout_below="@id/laserBtn"

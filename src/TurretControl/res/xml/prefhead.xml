@@ -1,0 +1,16 @@
+<preference-headers
+        xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+			<EditTextPreference
+				android:key="welcome_message"
+				android:title="walla" 
+				android:summary="wallawallawalla"
+				android:dialogTitle="walla"
+				android:dialogMessage="walla"    
+				android:defaultValue="walla" />
+	</PreferenceScreen>
+   <!-- <header android:fragment="org.jensenligan.turretcontrol.Preferences$PrefFragment"
+            android:title="Prefs 2"
+            android:summary="Some other preferences you can see.">
+    </header>-->
+</preference-headers>

@@ -3,6 +3,7 @@ package org.jensenligan.turretcontrol;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.graphics.Paint;
 import android.graphics.Canvas;
@@ -18,6 +19,8 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+
 import java.lang.Void;
 
 public class JoyStick extends View implements OnTouchListener, Runnable
@@ -56,9 +59,16 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 		connectToPi();
 	}
 
+	private String getIP()
+	{
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		String ip = prefs.getString("PI_IP", "0.0.0.0");
+		return ip;
+	}
+
 	private void connectToPi()
 	{
-		IP = getResources().getString(R.string.IP);
+		IP = getIP();
 		try
 		{
 			if(socket != null && socket.isConnected())
@@ -184,6 +194,25 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 		return toInteger(bits);
 	}
 
+	public void fireLaser()
+	{
+		new AsyncTask<Void, Void, Void>() {
+			public Void doInBackground(Void... p)
+			{
+				try {
+					IP = getIP();
+					byte[] by = ByteBuffer.allocate(4).putInt(8).array();
+					DatagramSocket so = new DatagramSocket();
+					so.send(new DatagramPacket(by, 3, 1, InetAddress.getByName(IP), PORT));
+					so.close();
+				} catch(Exception e) {
+					Log.e("SOCKET", "Error sending");
+				}
+				return null;
+			}
+		}.execute();
+	}
+
 	private int toInteger(int[] bits)
 	{
 		int ret = 0;
@@ -220,8 +249,8 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 		protected Void doInBackground(Integer... b)
 		{
 			try {
+				IP = getIP();
 				int byt = b[0].intValue() << 4;
-				//DataOutputStream out = new DataOutputStream(JoyStick.this.socket.getOutputStream());
 				Log.e("DATTA", "" + byt);
 				if(JoyStick.this.laser)
 					byt = addLaserBit(byt);
@@ -230,11 +259,6 @@ public class JoyStick extends View implements OnTouchListener, Runnable
 				DatagramSocket so = new DatagramSocket();
 				so.send(new DatagramPacket(by, 3, 1, InetAddress.getByName(IP), PORT));
 				so.close();
-				//out.writeByte(byt);
-				//out.flush();
-				//InputStream is = JoyStick.this.socket.getInputStream();
-				//byte[] bajs = new byte[1];
-				//is.read(bajs, 0, 1);
 			} catch(Exception e) {
 				connectToPi();
 				Log.e("SOCKET", "error sending");

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <EditTextPreference
+            android:key="PI_IP"
+            android:title="IP Adress" 
+            android:summary="The IP adress of the Pi"
+            android:dialogTitle="IP Adress"
+            android:defaultValue="X.X.X.X" />
+</PreferenceScreen>
