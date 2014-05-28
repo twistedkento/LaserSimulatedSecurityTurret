@@ -107,7 +107,7 @@ void CommunicationUDP::getResponse(void) {
             printf("%d\n",numbytes);
         }
         time(&loop_time);
-        if (difftime(loop_time,start_time) > 0.05) {
+        if (difftime(loop_time,start_time) > 0.2) {
             break;
         }
     }

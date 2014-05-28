@@ -1,6 +1,6 @@
 #pragma once
-#include <opencv2\opencv.hpp>
-#include <opencv2\core\types_c.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/types_c.h>
 typedef std::vector<cv::Point> cvcontour;
 struct contour{
 	contour(){

@@ -12,8 +12,8 @@ struct opticalFlow{
 	bool nightMode = false;
 	bool hasFace = false;
 
-	int eigen = 1;
-	int epsilon = 3;
+	int eigen = 15;
+	int epsilon = 15;
 	
 	cv::Mat frame;
 	cv::Mat gray;

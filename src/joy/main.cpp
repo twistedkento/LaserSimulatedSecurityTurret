@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     }
 
     Command com = Command();
-    CommunicationUDP server("127.0.0.1", "9999");
+    CommunicationUDP server("10.0.0.91", "9999");
     server.connect_udp();
 
     printf("%i joysticks were found.\n\n", SDL_NumJoysticks() );
@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
             printf("instance id: %d\n", SDL_JoystickInstanceID(joystick));
             printf(" guid: %s\n", guid);
             for(;;) {
+                //com = Command();
                 while (SDL_PollEvent(&event)) {
                     switch (event.type) {
                         case SDL_JOYAXISMOTION:
@@ -53,15 +54,14 @@ int main(int argc, char *argv[]) {
                                    event.jaxis.which,
                                    event.jaxis.axis, procent);*/
 
-                            //com = Command();
                             if (event.jaxis.axis == 0) {
                                 printf("Joystick %d axis %d value: %f\n",
                                        event.jaxis.which,
                                        event.jaxis.axis, procent);
                                 if (procent >= 0.1) {
-                                    com.setServoX(Command::CommandState::SERVO_INCREASE);
-                                } else if (procent <= -0.1) {
                                     com.setServoX(Command::CommandState::SERVO_DECREASE);
+                                } else if (procent <= -0.1) {
+                                    com.setServoX(Command::CommandState::SERVO_INCREASE);
                                 } else {
                                     com.setServoX(Command::CommandState::SERVO_OFF);
                                 }
@@ -70,9 +70,9 @@ int main(int argc, char *argv[]) {
                                        event.jaxis.which,
                                        event.jaxis.axis, procent);
                                 if (procent >= 0.1) {
-                                    com.setServoY(Command::CommandState::SERVO_INCREASE);
-                                } else if (procent <= -0.1) {
                                     com.setServoY(Command::CommandState::SERVO_DECREASE);
+                                } else if (procent <= -0.1) {
+                                    com.setServoY(Command::CommandState::SERVO_INCREASE);
                                 } else {
                                     com.setServoY(Command::CommandState::SERVO_OFF);
                                 }
@@ -105,6 +105,8 @@ int main(int argc, char *argv[]) {
                                 if (event.jbutton.button == 7) {
                                     server.disconnect();
                                     exit(1);
+                                } else {
+                                    com.setLaser(Command::CommandState::LASER_ON);
                                 }
                             } else {
                                 server.disconnect();
@@ -114,6 +116,7 @@ int main(int argc, char *argv[]) {
                         case SDL_JOYBUTTONUP:
                             printf("Joystick %d button %d up\n",
                                    event.jbutton.which, event.jbutton.button);
+                            com.setLaser(Command::CommandState::LASER_OFF);
                             break;
                     }
                 }

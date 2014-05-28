@@ -111,6 +111,7 @@ class TurretClass(object):
         '''
         self.manualmode = not self.manualmode
         print("Manualmode: " + str(self.manualmode))
+
     def call_camera(self, caddr):
         '''
         '''

@@ -1,6 +1,6 @@
 #include <vector>
-#include <opencv2\opencv.hpp>
-#include <opencv2\core\types_c.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/types_c.h>
 #include "contour.h"
 
 using namespace std;
@@ -47,21 +47,21 @@ std::pair<Scalar, Scalar> contour::getColorRange(cv::Mat frame)
 	
 	Mat edges;
 	Mat copy;
-	/*boundary.x -= boundary.width;
+	boundary.x -= boundary.width;
 	boundary.y -= boundary.height;
 	boundary.width *= 1.5;
 	boundary.height *= 1.5;
 	if (boundary.x < 0) boundary.x = 0;
 	if (boundary.y < 0) boundary.y = 0;
-	*/
+	
 
-	/*Mat lab;
+	Mat lab;
 	for (int x = boundary.x; x < boundary.x + boundary.width;++x)
 	{
 		for (int y = boundary.y; y < boundary.y + boundary.height; ++y)
 		{
 			if (pointPolygonTest(realcontour, Point(x, y), false) > 0){
-				Scalar color = frame.at<cv::Vec3b>(Point(x, y));
+				Scalar color = frame.at<uchar>(Point(x, y));
 				for (int i = 0; i < 3; i++)
 				{
 					cols[i].push_back(color[i]);
@@ -89,6 +89,6 @@ std::pair<Scalar, Scalar> contour::getColorRange(cv::Mat frame)
 		index++;
 	}
 	min[3] = 255;
-	max[3] = 255;*/
+	max[3] = 255;
 	return make_pair(min, max);
 }

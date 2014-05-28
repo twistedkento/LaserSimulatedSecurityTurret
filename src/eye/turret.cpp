@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 
-Turret::Turret() : connection("129.16.199.120","9999") {
+Turret::Turret() : connection("10.0.0.91","9999") {
     connection.connect_udp();
 }
 Turret::~Turret() {
