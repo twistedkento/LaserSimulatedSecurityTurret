@@ -1,14 +1,14 @@
 [Unit]
-Description=Try some ssh
-Before=network.target
+Description=Start autossh
+After=network.target netctl-auto@wlan0.service
  
 [Service]
 User=root
-ExecStart=-/bin/ssh 10.0.0.10 -N -o ConnectTimeout=1
+ExecStart=/bin/ssh -N -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -R 4321:localhost:22 autossh@hem.kento.se -p 22
+RestartSec=30
 Restart=always
-RestartSec=15
 StartLimitInterval=15
 StartLimitBurst=5
  
 [Install]
-WantedBy=network.target
+WantedBy=multi-user.target
